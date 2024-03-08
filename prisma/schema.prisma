@@ -16,6 +16,10 @@ model User {
   username String @unique
   password String
 
+  entities   Entity[]
+  payments   Payment[]
+  categories Category[]
+
   @@map("lucia_user")
 }
 
@@ -27,4 +31,60 @@ model Session {
   user      User     @relation(references: [id], fields: [userId], onDelete: Cascade)
 
   @@map("lucia_session")
+}
+
+model Entity {
+  id        Int        @id @default(autoincrement())
+  userId    String     @map("user_id")
+  user      User       @relation(fields: [userId], references: [id])
+  name      String
+  type      EntityType
+  createdAt DateTime   @default(now()) @map("created_at")
+  updatedAt DateTime   @updatedAt @map("updated_at")
+
+  paymentsAsPayor Payment[] @relation("PayorEntity")
+  paymentsAsPayee Payment[] @relation("PayeeEntity")
+
+  @@unique(fields: [userId, name])
+  @@map("entities")
+}
+
+enum EntityType {
+  Entity
+  Account
+}
+
+model Payment {
+  id         Int       @id @default(autoincrement())
+  userId     String    @map("user_id")
+  user       User      @relation(fields: [userId], references: [id])
+  amount     Int
+  currency   String    @default("EUR")
+  date       DateTime  @default(now())
+  payor      Entity    @relation("PayorEntity", fields: [payorId], references: [id])
+  payorId    Int       @map("payor_id")
+  payee      Entity    @relation("PayeeEntity", fields: [payeeId], references: [id])
+  payeeId    Int       @map("payee_id")
+  note       String?
+  category   Category? @relation(fields: [categoryId], references: [id])
+  categoryId Int?      @map("category_id")
+  createdAt  DateTime  @default(now()) @map("created_at")
+  updatedAt  DateTime  @updatedAt @map("updated_at")
+
+  @@map("payments")
+}
+
+model Category {
+  id        Int      @id @default(autoincrement())
+  userId    String   @map("user_id")
+  user      User     @relation(fields: [userId], references: [id])
+  name      String
+  color     String
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  payments Payment[]
+
+  @@unique(fields: [userId, name])
+  @@map("categories")
 }
