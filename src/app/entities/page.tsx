@@ -1,9 +1,7 @@
-import React from 'react';
-
-export default async function Home() {
+export default async function EntitiesPage() {
     return (
         <main className="flex items-center justify-center min-h-screen text-3xl">
-            Next Finances
+            Entities
         </main>
     );
 }
