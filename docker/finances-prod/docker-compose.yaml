@@ -1,8 +1,8 @@
 services:
 
   app-migrations:
-    container_name: base_migrations
-    image: markusthielker/next-base:1.0.0
+    container_name: next_finances_migrations
+    image: markusthielker/next-finances:1.0.0
     env_file:
       - .env
     depends_on:
@@ -13,8 +13,8 @@ services:
       - internal
 
   app:
-    container_name: base_app
-    image: markusthielker/next-base:1.0.0
+    container_name: next_finances_app
+    image: markusthielker/next-finances:1.0.0
     env_file:
       - .env
     depends_on:
@@ -23,17 +23,17 @@ services:
     restart: unless-stopped
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.xyz-base.rule=Host(`base.thielker.xyz`)"
-      - "traefik.http.routers.xyz-base.entrypoints=web, websecure"
-      - "traefik.http.routers.xyz-base.tls=true"
-      - "traefik.http.routers.xyz-base.tls.certresolver=lets-encrypt"
+      - "traefik.http.routers.xyz-next-finances.rule=Host(`finances.thielker.xyz`)"
+      - "traefik.http.routers.xyz-next-finances.entrypoints=web, websecure"
+      - "traefik.http.routers.xyz-next-finances.tls=true"
+      - "traefik.http.routers.xyz-next-finances.tls.certresolver=lets-encrypt"
     networks:
       - web
       - internal
 
   app-studio:
-    container_name: base_studio
-    image: markusthielker/next-base:1.0.0
+    container_name: next_finances_studio
+    image: markusthielker/next-finances:1.0.0
     env_file:
       - .env
     depends_on:
@@ -43,17 +43,17 @@ services:
     restart: unless-stopped
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.xyz-base-studio.rule=Host(`db.base.thielker.xyz`)"
-      - "traefik.http.routers.xyz-base-studio.entrypoints=web, websecure"
-      - "traefik.http.services.xyz-finances-db.loadbalancer.server.port=5555"
-      - "traefik.http.routers.xyz-base-studio.tls=true"
-      - "traefik.http.routers.xyz-base-studio.tls.certresolver=lets-encrypt"
+      - "traefik.http.routers.xyz-next-finances-studio.rule=Host(`studio.finances.thielker.xyz`)"
+      - "traefik.http.routers.xyz-next-finances-studio.entrypoints=web, websecure"
+      - "traefik.http.services.xyz-next-finances-studio.loadbalancer.server.port=5555"
+      - "traefik.http.routers.xyz-next-finances-studio.tls=true"
+      - "traefik.http.routers.xyz-next-finances-studio.tls.certresolver=lets-encrypt"
     networks:
       - web
       - internal
 
   postgres:
-    container_name: base_postgres
+    container_name: next_finances_postgres
     image: postgres:15.2
     restart: unless-stopped
     healthcheck:
@@ -64,7 +64,7 @@ services:
     environment:
       POSTGRES_USER: prisma
       POSTGRES_PASSWORD: prisma
-      POSTGRES_DB: base
+      POSTGRES_DB: finances
     volumes:
       - ./postgres-data:/var/lib/postgresql/data
     networks:

@@ -41,4 +41,4 @@ jobs:
         with:
           push: true
           platforms: linux/amd64
-          tags: markusthielker/next-base:latest, markusthielker/next-base:${{ steps.versions.outputs.tag_version }}
+          tags: markusthielker/next-finances:latest, markusthielker/next-finances:${{ steps.versions.outputs.tag_version }}
