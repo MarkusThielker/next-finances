@@ -12,7 +12,7 @@ export default async function Home() {
                     <User/>
                 </Link>
             </Button>
-            Next Base
+            Next Finances
         </main>
     );
 }
