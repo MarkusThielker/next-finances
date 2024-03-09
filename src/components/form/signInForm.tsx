@@ -8,7 +8,7 @@ import { Input } from '@/components/ui/input';
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { signInFormSchema } from '@/lib/form-schemas/signInFormSchema';
-import { ActionResponse } from '@/lib/actions/types/ActionResponse';
+import { ActionResponse } from '@/lib/types/ActionResponse';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 import { sonnerContent } from '@/components/ui/sonner';

@@ -4,7 +4,7 @@ import { useTheme } from 'next-themes';
 import { Toaster as Sonner } from 'sonner';
 import { AlertCircle, CheckCircle, HelpCircle, XCircle } from 'lucide-react';
 import React, { JSX } from 'react';
-import { ActionResponse } from '@/lib/actions/types/ActionResponse';
+import { ActionResponse } from '@/lib/types/ActionResponse';
 
 type ToasterProps = React.ComponentProps<typeof Sonner>
 
