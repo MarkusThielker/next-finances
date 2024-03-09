@@ -54,6 +54,7 @@ export default function Navigation() {
                     <NavigationMenuItem>
                         <Link href="/account" legacyBehavior passHref>
                             <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                                <span className="sr-only">Account</span>
                                 <User/>
                             </NavigationMenuLink>
                         </Link>
