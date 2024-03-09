@@ -1,6 +1,6 @@
 import { getSession, lucia } from '@/auth';
 import { cookies } from 'next/headers';
-import { ActionResponse } from '@/lib/actions/types/ActionResponse';
+import { ActionResponse } from '@/lib/types/ActionResponse';
 import { URL_SIGN_IN } from '@/lib/constants';
 
 export default async function signOut(): Promise<ActionResponse> {
