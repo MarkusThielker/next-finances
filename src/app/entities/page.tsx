@@ -1,7 +1,7 @@
 import { prismaClient } from '@/prisma';
 import { getUser } from '@/auth';
 import React from 'react';
-import EntityPageClientContent from '@/components/EntityPageClientComponents';
+import EntityPageClientContent from '@/components/entityPageClientComponents';
 import entityCreateUpdate from '@/lib/actions/entityCreateUpdate';
 import entityDelete from '@/lib/actions/entityDelete';
 
