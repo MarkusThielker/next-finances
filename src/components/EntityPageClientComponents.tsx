@@ -5,7 +5,7 @@ import React, { useState } from 'react';
 import { CellContext } from '@tanstack/table-core';
 import { Button } from '@/components/ui/button';
 import { Edit, Trash } from 'lucide-react';
-import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import EntityForm from '@/components/form/entityForm';
 import { DataTable } from '@/components/ui/data-table';
 import { columns } from '@/app/entities/columns';
@@ -16,6 +16,14 @@ import { Input } from '@/components/ui/input';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 import { sonnerContent } from '@/components/ui/sonner';
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogFooter,
+    AlertDialogHeader,
+} from '@/components/ui/alert-dialog';
 
 export default function EntityPageClientContent({entities, onSubmit, onDelete, className}: {
     entities: Entity[],
@@ -153,26 +161,20 @@ export default function EntityPageClientContent({entities, onSubmit, onDelete, c
                 pagination/>
 
             {/* Delete confirmation dialog */}
-            <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
-                <DialogContent>
-                    <DialogHeader>Delete Entity?</DialogHeader>
+            <AlertDialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+                <AlertDialogContent>
+                    <AlertDialogHeader>Delete Entity?</AlertDialogHeader>
                     <p>Are your sure you want to delete the entity {selectedEntity?.name}?</p>
-                    <DialogFooter>
-                        <Button
-                            className="w-full"
-                            onClick={() => {
-                                setIsDeleteDialogOpen(false);
-                            }}>
+                    <AlertDialogFooter>
+                        <AlertDialogCancel>
                             Cancel
-                        </Button>
-                        <Button
-                            className="w-full"
-                            onClick={() => handleDelete(selectedEntity?.id)}>
+                        </AlertDialogCancel>
+                        <AlertDialogAction onClick={() => handleDelete(selectedEntity?.id)}>
                             Delete
-                        </Button>
-                    </DialogFooter>
-                </DialogContent>
-            </Dialog>
+                        </AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
         </div>
     );
 }
