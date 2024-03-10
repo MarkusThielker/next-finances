@@ -94,7 +94,7 @@ export default function CategoryPageClientContent({categories, onSubmit, onDelet
     return (
         <div className={className}>
             <div className="flex items-center justify-between w-full">
-                <p className="text-3xl font-semibold">Entities</p>
+                <p className="text-3xl font-semibold">Categories</p>
 
                 {/* Edit dialog */}
                 <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
