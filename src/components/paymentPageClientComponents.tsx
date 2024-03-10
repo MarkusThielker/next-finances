@@ -1,13 +1,11 @@
 'use client';
 
-import { Category } from '@prisma/client';
 import React, { useState } from 'react';
 import { CellContext } from '@tanstack/table-core';
 import { Button } from '@/components/ui/button';
 import { Edit, Trash } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { DataTable } from '@/components/ui/data-table';
-import { columns } from '@/app/categories/columns';
 import { z } from 'zod';
 import { ActionResponse } from '@/lib/types/ActionResponse';
 import { useRouter } from 'next/navigation';
@@ -21,12 +19,23 @@ import {
     AlertDialogFooter,
     AlertDialogHeader,
 } from '@/components/ui/alert-dialog';
-import { categoryFormSchema } from '@/lib/form-schemas/categoryFormSchema';
-import CategoryForm from '@/components/form/categoryForm';
+import { paymentFormSchema } from '@/lib/form-schemas/paymentFormSchema';
+import { Category, Entity, Payment } from '@prisma/client';
+import PaymentForm from '@/components/form/paymentForm';
+import { columns } from '@/app/payments/columns';
 
-export default function CategoryPageClientContent({categories, onSubmit, onDelete, className}: {
+export default function PaymentPageClientContent({
+    payments,
+    entities,
+    categories,
+    onSubmit,
+    onDelete,
+    className,
+}: {
+    payments: Payment[],
+    entities: Entity[],
     categories: Category[],
-    onSubmit: (data: z.infer<typeof categoryFormSchema>) => Promise<ActionResponse>,
+    onSubmit: (data: z.infer<typeof paymentFormSchema>) => Promise<ActionResponse>,
     onDelete: (id: number) => Promise<ActionResponse>,
     className: string,
 }) {
@@ -36,9 +45,9 @@ export default function CategoryPageClientContent({categories, onSubmit, onDelet
     const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
     const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 
-    const [selectedCategory, setSelectedCategory] = useState<Category | undefined>(undefined);
+    const [selectedPayment, setSelectedPayment] = useState<Payment | undefined>(undefined);
 
-    async function handleSubmit(data: z.infer<typeof categoryFormSchema>) {
+    async function handleSubmit(data: z.infer<typeof paymentFormSchema>) {
         const response = await onSubmit(data);
         router.refresh();
         setIsEditDialogOpen(false);
@@ -61,8 +70,8 @@ export default function CategoryPageClientContent({categories, onSubmit, onDelet
         return response;
     }
 
-    const actionCell = ({row}: CellContext<Category, unknown>) => {
-        const category = row.original as Category;
+    const actionCell = ({row}: CellContext<Payment, unknown>) => {
+        const payment = row.original as Payment;
 
         return (
             <div className="flex items-center space-x-4">
@@ -70,51 +79,67 @@ export default function CategoryPageClientContent({categories, onSubmit, onDelet
                     variant="ghost"
                     className="h-8 w-8 p-0"
                     onClick={() => {
-                        setSelectedCategory(category);
+                        setSelectedPayment(payment);
                         setIsEditDialogOpen(true);
                     }}>
-                    <span className="sr-only">Edit category</span>
+                    <span className="sr-only">Edit payment</span>
                     <Edit className="h-4 w-4"/>
                 </Button>
                 <Button
                     variant="ghost"
                     className="h-8 w-8 p-0"
                     onClick={() => {
-                        setSelectedCategory(category);
+                        setSelectedPayment(payment);
                         setIsDeleteDialogOpen(true);
                     }}
                 >
-                    <span className="sr-only">Delete category</span>
+                    <span className="sr-only">Delete payment</span>
                     <Trash className="h-4 w-4"/>
                 </Button>
             </div>
         );
     };
 
+    const entitiesMapped = entities?.map((entity) => {
+        return {
+            label: entity.name,
+            value: entity.id,
+        };
+    }) ?? [];
+
+    const categoriesMapped = categories?.map((category) => {
+        return {
+            label: category.name,
+            value: category.id,
+        };
+    }) ?? [];
+
     return (
         <div className={className}>
             <div className="flex items-center justify-between w-full">
-                <p className="text-3xl font-semibold">Categories</p>
+                <p className="text-3xl font-semibold">Payments</p>
 
                 {/* Edit dialog */}
                 <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
                     <DialogTrigger asChild>
                         <Button
                             onClick={() => {
-                                setSelectedCategory(undefined);
+                                setSelectedPayment(undefined);
                                 setIsEditDialogOpen(true);
                             }}>
-                            Create Category
+                            Create Payment
                         </Button>
                     </DialogTrigger>
                     <DialogContent>
                         <DialogHeader>
-                            <DialogTitle>{selectedCategory?.id ? 'Update Category' : 'Create Category'}</DialogTitle>
+                            <DialogTitle>{selectedPayment?.id ? 'Update Payment' : 'Create Payment'}</DialogTitle>
                         </DialogHeader>
-                        <CategoryForm
-                            value={selectedCategory}
+                        <PaymentForm
+                            value={selectedPayment}
+                            entities={entities}
+                            categories={categories}
                             onSubmit={handleSubmit}
-                            className="flex flex-row space-x-4 py-4"/>
+                            className="grid grid-cols-1 md:grid-cols-2 gap-4 py-4"/>
                     </DialogContent>
                 </Dialog>
             </div>
@@ -122,20 +147,20 @@ export default function CategoryPageClientContent({categories, onSubmit, onDelet
             {/* Data Table */}
             <DataTable
                 className="w-full"
-                columns={columns(actionCell)}
-                data={categories}
+                columns={columns(actionCell, entities, categories)}
+                data={payments}
                 pagination/>
 
             {/* Delete confirmation dialog */}
             <AlertDialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
                 <AlertDialogContent>
-                    <AlertDialogHeader>Delete Category?</AlertDialogHeader>
-                    <p>Are your sure you want to delete the category {selectedCategory?.name}?</p>
+                    <AlertDialogHeader>Delete Payment?</AlertDialogHeader>
+                    <p>Are your sure you want to delete the payment?</p>
                     <AlertDialogFooter>
                         <AlertDialogCancel>
                             Cancel
                         </AlertDialogCancel>
-                        <AlertDialogAction onClick={() => handleDelete(selectedCategory?.id)}>
+                        <AlertDialogAction onClick={() => handleDelete(selectedPayment?.id)}>
                             Delete
                         </AlertDialogAction>
                     </AlertDialogFooter>
