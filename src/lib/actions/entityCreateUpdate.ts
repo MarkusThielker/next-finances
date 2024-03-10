@@ -35,6 +35,12 @@ export default async function entityCreateUpdate({
                     },
                 },
             );
+
+            // return success
+            return {
+                type: 'success',
+                message: `${type} '${name}' updated`,
+            };
         } else {
             await prismaClient.entity.create({
                 data: {
@@ -43,6 +49,12 @@ export default async function entityCreateUpdate({
                     type: type,
                 },
             });
+
+            // return success
+            return {
+                type: 'success',
+                message: `${type} '${name}' created`,
+            };
         }
     } catch (e) {
         return {
@@ -50,10 +62,4 @@ export default async function entityCreateUpdate({
             message: 'Failed creating/updating entity',
         };
     }
-
-    // return success
-    return {
-        type: 'success',
-        message: `${type} '${name}' created`,
-    };
 }
