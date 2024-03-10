@@ -3,13 +3,10 @@ import React from 'react';
 import { getUser } from '@/auth';
 import { redirect } from 'next/navigation';
 import signOut from '@/lib/actions/signOut';
-import { Button } from '@/components/ui/button';
-import Link from 'next/link';
-import { ChevronLeft } from 'lucide-react';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import SignOutForm from '@/components/form/signOutForm';
-import { URL_HOME, URL_SIGN_IN } from '@/lib/constants';
+import { URL_SIGN_IN } from '@/lib/constants';
 
 export default async function AccountPage() {
 
@@ -20,13 +17,8 @@ export default async function AccountPage() {
     }
 
     return (
-        <div className="flex min-h-screen flex-col items-center justify-center relative">
-            <Button variant="ghost" size="icon" className="absolute top-4 left-4" asChild>
-                <Link href={URL_HOME}>
-                    <ChevronLeft/>
-                </Link>
-            </Button>
-            <Card className="w-full max-w-md">
+        <div className="flex flex-col items-center">
+            <Card className="w-full max-w-md mt-12">
                 <CardHeader>
                     <CardTitle>Hey, {user?.username}!</CardTitle>
                     <CardDescription>This is your account overview.</CardDescription>

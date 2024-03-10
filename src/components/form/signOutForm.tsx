@@ -1,6 +1,6 @@
 'use client';
 
-import { ActionResponse } from '@/lib/actions/types/ActionResponse';
+import { ActionResponse } from '@/lib/types/ActionResponse';
 import { Button } from '@/components/ui/button';
 import React from 'react';
 import { useRouter } from 'next/navigation';

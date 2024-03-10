@@ -1,10 +1,11 @@
 import { z } from 'zod';
 import { Argon2id } from 'oslo/password';
-import { lucia, prismaClient } from '@/auth';
+import { lucia } from '@/auth';
 import { cookies } from 'next/headers';
 import { signInFormSchema } from '@/lib/form-schemas/signInFormSchema';
-import { ActionResponse } from '@/lib/actions/types/ActionResponse';
+import { ActionResponse } from '@/lib/types/ActionResponse';
 import { URL_HOME } from '@/lib/constants';
+import { prismaClient } from '@/prisma';
 
 export default async function signIn({username, password}: z.infer<typeof signInFormSchema>): Promise<ActionResponse> {
     'use server';
