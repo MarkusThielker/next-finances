@@ -12,15 +12,17 @@ export default async function entityCreateUpdate({
 }: z.infer<typeof entityFormSchema>): Promise<ActionResponse> {
     'use server';
 
+    // check that user is logged in
     const user = await getUser();
     if (!user) {
         return {
             type: 'error',
-            message: 'You must be logged in to create an entity.',
+            message: 'You must be logged in to create/update an entity.',
             redirect: URL_SIGN_IN,
         };
     }
 
+    // create/update entity
     try {
         if (id) {
             await prismaClient.entity.update({
@@ -45,12 +47,13 @@ export default async function entityCreateUpdate({
     } catch (e) {
         return {
             type: 'error',
-            message: 'Invalid entity data',
+            message: 'Failed creating/updating entity',
         };
     }
 
+    // return success
     return {
         type: 'success',
-        message: `Created an entity with name: ${name} and type: ${type}`,
+        message: `${type} '${name}' created`,
     };
 }
