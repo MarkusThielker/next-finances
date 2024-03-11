@@ -3,7 +3,7 @@ import type { Category, Entity } from '@prisma/client';
 import { EntityType } from '@prisma/client';
 import { getUser } from '@/auth';
 import { URL_SIGN_IN } from '@/lib/constants';
-import { ActionResponse } from '@/lib/types/ActionResponse';
+import { ActionResponse } from '@/lib/types/actionResponse';
 
 export default async function generateSampleData(): Promise<ActionResponse> {
     'use server';
