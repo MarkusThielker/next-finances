@@ -7,6 +7,8 @@ import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import SignOutForm from '@/components/form/signOutForm';
 import { URL_SIGN_IN } from '@/lib/constants';
+import GenerateSampleDataForm from '@/components/form/generateSampleDataForm';
+import generateSampleData from '@/lib/actions/generateSampleData';
 
 export default async function AccountPage() {
 
@@ -37,7 +39,12 @@ export default async function AccountPage() {
                             value={user?.username}/>
                     </div>
                 </CardContent>
-                <CardFooter>
+                <CardFooter className="space-x-4">
+                    {
+                        process.env.NODE_ENV === 'development' && (
+                            <GenerateSampleDataForm onSubmit={generateSampleData}/>
+                        )
+                    }
                     <SignOutForm onSubmit={signOut}/>
                 </CardFooter>
             </Card>
