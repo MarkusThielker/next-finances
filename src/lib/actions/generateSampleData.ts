@@ -170,7 +170,7 @@ export default async function generateSampleData(): Promise<ActionResponse> {
                 amount: Math.floor(
                     Math.random() * (maxAmount - minAmount) + minAmount),
                 date: date,
-                payorId: 1,
+                payorId: entities[0].id,
                 payeeId: Math.floor(
                     Math.random() * (maxPayee - minPayee) + minPayee),
                 categoryId: Math.floor(
