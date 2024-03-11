@@ -2,7 +2,7 @@
   "name": "next-finances",
   "description": "A finances application to keep track of my personal spendings",
   "homepage": "https://github.com/MarkusThielker/next-finances",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "license": "MIT",
   "author": {
     "name": "Markus Thielker"
