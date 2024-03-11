@@ -14,9 +14,7 @@ export default function GenerateSampleDataForm({onSubmit}: { onSubmit: () => Pro
     const handleSubmit = async () => {
         const response = await onSubmit();
         toast(sonnerContent(response));
-        if (response.redirect) {
-            router.push(response.redirect);
-        }
+        router.refresh();
     };
 
     return (
