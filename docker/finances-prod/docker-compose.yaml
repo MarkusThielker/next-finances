@@ -9,6 +9,8 @@ services:
       postgres:
         condition: service_healthy
     command: [ "npx", "prisma", "migrate", "deploy" ]
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
     networks:
       - internal
 
@@ -27,6 +29,7 @@ services:
       - "traefik.http.routers.xyz-next-finances.entrypoints=web, websecure"
       - "traefik.http.routers.xyz-next-finances.tls=true"
       - "traefik.http.routers.xyz-next-finances.tls.certresolver=lets-encrypt"
+      - "com.centurylinklabs.watchtower.enable=true"
     networks:
       - web
       - internal
@@ -48,6 +51,7 @@ services:
       - "traefik.http.services.xyz-next-finances-studio.loadbalancer.server.port=5555"
       - "traefik.http.routers.xyz-next-finances-studio.tls=true"
       - "traefik.http.routers.xyz-next-finances-studio.tls.certresolver=lets-encrypt"
+      - "com.centurylinklabs.watchtower.enable=true"
     networks:
       - web
       - internal
