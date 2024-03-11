@@ -4,8 +4,9 @@ import { ColumnDef, flexRender, getCoreRowModel, getPaginationRowModel, useReact
 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from 'lucide-react';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[];
@@ -20,12 +21,20 @@ export function DataTable<TData, TValue>({
     pagination,
     className,
 }: DataTableProps<TData, TValue>) {
+
     const table = useReactTable({
         data,
         columns,
         getCoreRowModel: getCoreRowModel(),
         getPaginationRowModel: pagination ? getPaginationRowModel() : undefined,
     });
+
+    const [pageSize, setPageSize] = useState(50);
+    useEffect(() => {
+        if (pagination) {
+            table.setPageSize(pageSize);
+        }
+    }, [table, pagination, pageSize]);
 
     return (
         <div className={className}>
@@ -75,43 +84,62 @@ export function DataTable<TData, TValue>({
             </div>
             {
                 pagination && (
-                    <div className="flex items-center justify-end space-x-2 py-4">
-                        <Button
-                            variant="outline"
-                            size="icon"
-                            onClick={() => table.firstPage()}
-                            disabled={!table.getCanPreviousPage()}
+                    <div className="flex items-center justify-between py-4">
+                        <Select
+                            onValueChange={(value) => {
+                                setPageSize(parseInt(value));
+                            }}
+                            value={pageSize.toString()}
                         >
-                            <span className="sr-only">First page</span>
-                            <ChevronsLeft/>
-                        </Button>
-                        <Button
-                            variant="outline"
-                            size="icon"
-                            onClick={() => table.previousPage()}
-                            disabled={!table.getCanPreviousPage()}
-                        >
-                            <span className="sr-only">Previous page</span>
-                            <ChevronLeft/>
-                        </Button>
-                        <Button
-                            variant="outline"
-                            size="icon"
-                            onClick={() => table.nextPage()}
-                            disabled={!table.getCanNextPage()}
-                        >
-                            <span className="sr-only">Next page</span>
-                            <ChevronRight/>
-                        </Button>
-                        <Button
-                            variant="outline"
-                            size="icon"
-                            onClick={() => table.lastPage()}
-                            disabled={!table.getCanNextPage()}
-                        >
-                            <span className="sr-only">Last page</span>
-                            <ChevronsRight/>
-                        </Button>
+                            <SelectTrigger className="w-[150px]">
+                                <SelectValue placeholder="Select a scope"/>
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value={'25'} key={'25'}>25</SelectItem>
+                                <SelectItem value={'50'} key={'50'}>50</SelectItem>
+                                <SelectItem value={'75'} key={'75'}>75</SelectItem>
+                                <SelectItem value={'100'} key={'100'}>100</SelectItem>
+                            </SelectContent>
+                        </Select>
+
+                        <div className="flex flex-row items-center space-x-2">
+                            <Button
+                                variant="outline"
+                                size="icon"
+                                onClick={() => table.firstPage()}
+                                disabled={!table.getCanPreviousPage()}
+                            >
+                                <span className="sr-only">First page</span>
+                                <ChevronsLeft/>
+                            </Button>
+                            <Button
+                                variant="outline"
+                                size="icon"
+                                onClick={() => table.previousPage()}
+                                disabled={!table.getCanPreviousPage()}
+                            >
+                                <span className="sr-only">Previous page</span>
+                                <ChevronLeft/>
+                            </Button>
+                            <Button
+                                variant="outline"
+                                size="icon"
+                                onClick={() => table.nextPage()}
+                                disabled={!table.getCanNextPage()}
+                            >
+                                <span className="sr-only">Next page</span>
+                                <ChevronRight/>
+                            </Button>
+                            <Button
+                                variant="outline"
+                                size="icon"
+                                onClick={() => table.lastPage()}
+                                disabled={!table.getCanNextPage()}
+                            >
+                                <span className="sr-only">Last page</span>
+                                <ChevronsRight/>
+                            </Button>
+                        </div>
                     </div>
                 )
             }
