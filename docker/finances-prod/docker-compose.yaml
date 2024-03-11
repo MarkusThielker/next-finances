@@ -8,7 +8,7 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
-    command: [ "npx", "prisma", "migrate", "deploy" ]
+    command: npx prisma migrate deploy
     labels:
       - "com.centurylinklabs.watchtower.enable=true"
     networks:
@@ -42,7 +42,7 @@ services:
     depends_on:
       app-migrations:
         condition: service_completed_successfully
-    command: "npx prisma studio"
+    command: npx prisma studio
     restart: unless-stopped
     labels:
       - "traefik.enable=true"
@@ -66,13 +66,18 @@ services:
       timeout: 5s
       retries: 5
     environment:
-      POSTGRES_USER: prisma
-      POSTGRES_PASSWORD: prisma
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_DB: finances
     volumes:
-      - ./postgres-data:/var/lib/postgresql/data
+      - postgres-data:/var/lib/postgresql/data
     networks:
       - internal
+
+
+volumes:
+  postgres-data:
+
 
 networks:
   web:
