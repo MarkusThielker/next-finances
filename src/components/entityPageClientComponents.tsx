@@ -11,7 +11,7 @@ import { DataTable } from '@/components/ui/data-table';
 import { columns } from '@/app/entities/columns';
 import { z } from 'zod';
 import { entityFormSchema } from '@/lib/form-schemas/entityFormSchema';
-import { ActionResponse } from '@/lib/types/ActionResponse';
+import { ActionResponse } from '@/lib/types/actionResponse';
 import { Input } from '@/components/ui/input';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';

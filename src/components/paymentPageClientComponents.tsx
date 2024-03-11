@@ -7,7 +7,7 @@ import { Edit, Trash } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { DataTable } from '@/components/ui/data-table';
 import { z } from 'zod';
-import { ActionResponse } from '@/lib/types/ActionResponse';
+import { ActionResponse } from '@/lib/types/actionResponse';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 import { sonnerContent } from '@/components/ui/sonner';

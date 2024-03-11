@@ -1,4 +1,4 @@
-import { ActionResponse } from '@/lib/types/ActionResponse';
+import { ActionResponse } from '@/lib/types/actionResponse';
 import { prismaClient } from '@/prisma';
 import { getUser } from '@/auth';
 import { URL_SIGN_IN } from '@/lib/constants';
