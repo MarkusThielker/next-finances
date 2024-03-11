@@ -2,19 +2,21 @@ services:
 
   app-migrations:
     container_name: next_finances_migrations
-    image: markusthielker/next-finances:1.0.0
+    image: markusthielker/next-finances:latest
     env_file:
       - .env
     depends_on:
       postgres:
         condition: service_healthy
-    command: [ "npx", "prisma", "migrate", "deploy" ]
+    command: npx prisma migrate deploy
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
     networks:
       - internal
 
   app:
     container_name: next_finances_app
-    image: markusthielker/next-finances:1.0.0
+    image: markusthielker/next-finances:latest
     env_file:
       - .env
     depends_on:
@@ -27,19 +29,20 @@ services:
       - "traefik.http.routers.xyz-next-finances.entrypoints=web, websecure"
       - "traefik.http.routers.xyz-next-finances.tls=true"
       - "traefik.http.routers.xyz-next-finances.tls.certresolver=lets-encrypt"
+      - "com.centurylinklabs.watchtower.enable=true"
     networks:
       - web
       - internal
 
   app-studio:
     container_name: next_finances_studio
-    image: markusthielker/next-finances:1.0.0
+    image: markusthielker/next-finances:latest
     env_file:
       - .env
     depends_on:
       app-migrations:
         condition: service_completed_successfully
-    command: "npx prisma studio"
+    command: npx prisma studio
     restart: unless-stopped
     labels:
       - "traefik.enable=true"
@@ -48,6 +51,7 @@ services:
       - "traefik.http.services.xyz-next-finances-studio.loadbalancer.server.port=5555"
       - "traefik.http.routers.xyz-next-finances-studio.tls=true"
       - "traefik.http.routers.xyz-next-finances-studio.tls.certresolver=lets-encrypt"
+      - "com.centurylinklabs.watchtower.enable=true"
     networks:
       - web
       - internal
@@ -62,13 +66,18 @@ services:
       timeout: 5s
       retries: 5
     environment:
-      POSTGRES_USER: prisma
-      POSTGRES_PASSWORD: prisma
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_DB: finances
     volumes:
-      - ./postgres-data:/var/lib/postgresql/data
+      - postgres-data:/var/lib/postgresql/data
     networks:
       - internal
+
+
+volumes:
+  postgres-data:
+
 
 networks:
   web:

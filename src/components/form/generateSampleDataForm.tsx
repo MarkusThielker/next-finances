@@ -5,7 +5,7 @@ import React from 'react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 import { sonnerContent } from '@/components/ui/sonner';
-import { ActionResponse } from '@/lib/types/ActionResponse';
+import { ActionResponse } from '@/lib/types/actionResponse';
 
 export default function GenerateSampleDataForm({onSubmit}: { onSubmit: () => Promise<ActionResponse> }) {
 
