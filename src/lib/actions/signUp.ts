@@ -4,7 +4,7 @@ import { generateId } from 'lucia';
 import { lucia } from '@/auth';
 import { cookies } from 'next/headers';
 import { signUpFormSchema } from '@/lib/form-schemas/signUpFormSchema';
-import { ActionResponse } from '@/lib/types/ActionResponse';
+import { ActionResponse } from '@/lib/types/actionResponse';
 import { URL_HOME } from '@/lib/constants';
 import { prismaClient } from '@/prisma';
 

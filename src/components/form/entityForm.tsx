@@ -7,7 +7,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@/components/ui/input';
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { ActionResponse } from '@/lib/types/ActionResponse';
+import { ActionResponse } from '@/lib/types/actionResponse';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 import { sonnerContent } from '@/components/ui/sonner';

@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { ActionResponse } from '@/lib/types/ActionResponse';
+import { ActionResponse } from '@/lib/types/actionResponse';
 import { entityFormSchema } from '@/lib/form-schemas/entityFormSchema';
 import { prismaClient } from '@/prisma';
 import { getUser } from '@/auth';
