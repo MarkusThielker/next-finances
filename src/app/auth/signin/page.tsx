@@ -7,7 +7,7 @@ import { URL_SIGN_UP } from '@/lib/constants';
 
 export default async function SignInPage() {
     return (
-        <Card className="w-full max-w-md">
+        <Card className="w-full max-w-md mt-12">
             <CardHeader>
                 <CardTitle>Sign in</CardTitle>
                 <CardDescription>Sign into your existing account</CardDescription>
