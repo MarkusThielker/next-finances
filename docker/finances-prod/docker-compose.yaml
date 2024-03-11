@@ -2,7 +2,7 @@ services:
 
   app-migrations:
     container_name: next_finances_migrations
-    image: markusthielker/next-finances:1.0.0
+    image: markusthielker/next-finances:latest
     env_file:
       - .env
     depends_on:
@@ -14,7 +14,7 @@ services:
 
   app:
     container_name: next_finances_app
-    image: markusthielker/next-finances:1.0.0
+    image: markusthielker/next-finances:latest
     env_file:
       - .env
     depends_on:
@@ -33,7 +33,7 @@ services:
 
   app-studio:
     container_name: next_finances_studio
-    image: markusthielker/next-finances:1.0.0
+    image: markusthielker/next-finances:latest
     env_file:
       - .env
     depends_on:
