@@ -20,26 +20,25 @@ export default async function AccountPage() {
     }
 
     let paymentCount = 0;
-    let entityCount = 0;
-    let categoryCount = 0;
+    paymentCount = await prismaClient.payment.count({
+        where: {
+            userId: user.id,
+        },
+    });
 
-    if (process.env.NODE_ENV === 'development') {
-        paymentCount = await prismaClient.payment.count({
-            where: {
-                userId: user.id,
-            },
-        });
-        entityCount = await prismaClient.entity.count({
-            where: {
-                userId: user.id,
-            },
-        });
-        categoryCount = await prismaClient.category.count({
-            where: {
-                userId: user.id,
-            },
-        });
-    }
+    let entityCount = 0;
+    entityCount = await prismaClient.entity.count({
+        where: {
+            userId: user.id,
+        },
+    });
+
+    let categoryCount = 0;
+    categoryCount = await prismaClient.category.count({
+        where: {
+            userId: user.id,
+        },
+    });
 
     return (
         <div className="flex flex-col items-center">
