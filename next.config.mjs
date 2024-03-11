@@ -8,6 +8,9 @@ const nextConfig = {
         return config;
     },
     output: 'standalone',
+    env: {
+        appVersion: process.env.npm_package_version,
+    },
 };
 
 export default nextConfig;

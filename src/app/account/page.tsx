@@ -90,6 +90,23 @@ export default async function AccountPage() {
                     <SignOutForm onSubmit={signOut}/>
                 </CardFooter>
             </Card>
+            <div className="flex w-full items-center justify-between max-w-md mt-2 text-neutral-600">
+                <p>Version {process.env.appVersion}</p>
+                <div className="flex items-center justify-between space-x-4">
+                    <a
+                        target="_blank"
+                        className="hover:text-neutral-500 duration-100"
+                        href="https://github.com/MarkusThielker/next-finances">
+                        Source Code
+                    </a>
+                    <a
+                        target="_blank"
+                        className="hover:text-neutral-500 duration-100"
+                        href="https://github.com/MarkusThielker/next-finances/releases">
+                        Changelog
+                    </a>
+                </div>
+            </div>
         </div>
     );
 }
