@@ -22,10 +22,10 @@ export default function RootLayout({
         <html lang="en">
         <body className={cn('dark', inter.className)}>
         <Navigation/>
-        <main>
+        <main className="p-8">
             {children}
-            <Toaster/>
         </main>
+        <Toaster/>
         </body>
         </html>
     );

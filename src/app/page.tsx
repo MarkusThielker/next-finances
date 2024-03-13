@@ -200,7 +200,7 @@ export default async function DashboardPage(props: { searchParams?: { scope: Sco
             categoryPercentages={categoryPercentages}
             entityExpenses={entityExpensesFormat}
             entityPercentages={entityPercentages}
-            className="flex flex-col justify-center space-y-4 p-10"
+            className="flex flex-col justify-center space-y-4"
         />
     );
 }

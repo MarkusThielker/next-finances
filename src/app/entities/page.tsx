@@ -28,6 +28,6 @@ export default async function EntitiesPage() {
             entities={entities}
             onSubmit={entityCreateUpdate}
             onDelete={entityDelete}
-            className="flex flex-col justify-center space-y-4 p-10"/>
+            className="flex flex-col justify-center space-y-4"/>
     );
 }
