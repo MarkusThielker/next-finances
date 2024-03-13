@@ -16,7 +16,7 @@ export default function Navigation() {
     return (
         <div className="flex sticky items-center border-b border-border bg-background">
             <NavigationMenu>
-                <NavigationMenuList className="flex w-screen items-center justify-between px-4 py-2">
+                <NavigationMenuList className="flex w-screen items-center justify-between sm:px-4 py-2">
                     <div className="inline-flex space-x-2">
 
                         <img src={'/logo_white.png'} alt="Finances" className="h-10 w-10 mx-3"/>
