@@ -25,6 +25,6 @@ export default async function CategoriesPage() {
             categories={categories}
             onSubmit={categoryCreateUpdate}
             onDelete={categoryDelete}
-            className="flex flex-col justify-center space-y-4 p-10"/>
+            className="flex flex-col justify-center space-y-4"/>
     );
 }
