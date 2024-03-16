@@ -25,6 +25,7 @@ export const columns = (
                     </svg>
                 );
             },
+            size: 65,
         },
         {
             accessorKey: 'createdAt',

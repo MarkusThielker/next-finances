@@ -100,20 +100,6 @@ export default function PaymentPageClientContent({
         );
     };
 
-    const entitiesMapped = entities?.map((entity) => {
-        return {
-            label: entity.name,
-            value: entity.id,
-        };
-    }) ?? [];
-
-    const categoriesMapped = categories?.map((category) => {
-        return {
-            label: category.name,
-            value: category.id,
-        };
-    }) ?? [];
-
     return (
         <div className={className}>
             <div className="flex items-center justify-between w-full">
