@@ -23,6 +23,8 @@ import {
 } from '@/components/ui/alert-dialog';
 import { categoryFormSchema } from '@/lib/form-schemas/categoryFormSchema';
 import CategoryForm from '@/components/form/categoryForm';
+import { useMediaQuery } from '@/lib/hooks/useMediaQuery';
+import { Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerTrigger } from '@/components/ui/drawer';
 
 export default function CategoryPageClientContent({categories, onSubmit, onDelete, className}: {
     categories: Category[],
@@ -31,6 +33,7 @@ export default function CategoryPageClientContent({categories, onSubmit, onDelet
     className: string,
 }) {
 
+    const isDesktop = useMediaQuery('(min-width: 768px)');
     const router = useRouter();
 
     const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
@@ -97,26 +100,51 @@ export default function CategoryPageClientContent({categories, onSubmit, onDelet
                 <p className="text-3xl font-semibold">Categories</p>
 
                 {/* Edit dialog */}
-                <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
-                    <DialogTrigger asChild>
-                        <Button
-                            onClick={() => {
-                                setSelectedCategory(undefined);
-                                setIsEditDialogOpen(true);
-                            }}>
-                            Create Category
-                        </Button>
-                    </DialogTrigger>
-                    <DialogContent>
-                        <DialogHeader>
-                            <DialogTitle>{selectedCategory?.id ? 'Update Category' : 'Create Category'}</DialogTitle>
-                        </DialogHeader>
-                        <CategoryForm
-                            value={selectedCategory}
-                            onSubmit={handleSubmit}
-                            className="flex flex-row space-x-4 py-4"/>
-                    </DialogContent>
-                </Dialog>
+                {
+                    isDesktop ? (
+                        <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
+                            <DialogTrigger asChild>
+                                <Button
+                                    onClick={() => {
+                                        setSelectedCategory(undefined);
+                                        setIsEditDialogOpen(true);
+                                    }}>
+                                    Create Category
+                                </Button>
+                            </DialogTrigger>
+                            <DialogContent>
+                                <DialogHeader>
+                                    <DialogTitle>{selectedCategory?.id ? 'Update Category' : 'Create Category'}</DialogTitle>
+                                </DialogHeader>
+                                <CategoryForm
+                                    value={selectedCategory}
+                                    onSubmit={handleSubmit}
+                                    className="flex flex-row space-x-4 py-4"/>
+                            </DialogContent>
+                        </Dialog>
+                    ) : (
+                        <Drawer open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
+                            <DrawerTrigger asChild>
+                                <Button
+                                    onClick={() => {
+                                        setSelectedCategory(undefined);
+                                        setIsEditDialogOpen(true);
+                                    }}>
+                                    Create Payment
+                                </Button>
+                            </DrawerTrigger>
+                            <DrawerContent className="p-4">
+                                <DrawerHeader>
+                                    <DrawerTitle>{selectedCategory?.id ? 'Update Category' : 'Create Category'}</DrawerTitle>
+                                </DrawerHeader>
+                                <CategoryForm
+                                    value={selectedCategory}
+                                    onSubmit={handleSubmit}
+                                    className="flex flex-row space-x-4 py-4"/>
+                            </DrawerContent>
+                        </Drawer>
+                    )
+                }
             </div>
 
             {/* Data Table */}
