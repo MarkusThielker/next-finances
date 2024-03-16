@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import React, { useState } from 'react';
+import React, { useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { ActionResponse } from '@/lib/types/actionResponse';
 import { useRouter } from 'next/navigation';
@@ -16,11 +16,11 @@ import { paymentFormSchema } from '@/lib/form-schemas/paymentFormSchema';
 import CurrencyInput from '@/components/ui/currency-input';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { cn } from '@/lib/utils';
-import { CalendarIcon, Check, ChevronsUpDown } from 'lucide-react';
+import { CalendarIcon } from 'lucide-react';
 import { format } from 'date-fns';
 import { Calendar } from '@/components/ui/calendar';
-import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import { Textarea } from '@/components/ui/textarea';
+import { AutoCompleteInput } from '@/components/ui/auto-complete-input';
 
 export default function PaymentForm({value, entities, categories, onSubmit, className}: {
     value: Payment | undefined,
@@ -31,12 +31,6 @@ export default function PaymentForm({value, entities, categories, onSubmit, clas
 }) {
 
     const router = useRouter();
-
-    const [filter, setFilter] = useState<string>('');
-
-    const [payorOpen, setPayorOpen] = useState(false);
-    const [payeeOpen, setPayeeOpen] = useState(false);
-    const [categoryOpen, setCategoryOpen] = useState(false);
 
     const form = useForm<z.infer<typeof paymentFormSchema>>({
         resolver: zodResolver(paymentFormSchema),
@@ -72,6 +66,10 @@ export default function PaymentForm({value, entities, categories, onSubmit, clas
             value: category.id,
         };
     }) ?? [];
+
+    const payeeRef = useRef<HTMLInputElement>(null);
+    const categoryRef = useRef<HTMLInputElement>(null);
+    const noteRef = useRef<HTMLInputElement>(null);
 
     return (
         <Form {...form}>
@@ -145,61 +143,13 @@ export default function PaymentForm({value, entities, categories, onSubmit, clas
                         render={({field}) => (
                             <FormItem>
                                 <FormLabel>Payor</FormLabel>
-                                <Popover open={payorOpen} onOpenChange={(open) => {
-                                    setPayorOpen(open);
-                                    setFilter('');
-                                }}>
-                                    <PopoverTrigger asChild>
-                                        <FormControl>
-                                            <Button
-                                                variant="outline"
-                                                role="combobox"
-                                                className={cn(
-                                                    'w-full justify-between',
-                                                    !field.value && 'text-muted-foreground',
-                                                )}
-                                            >
-                                                {field.value
-                                                    ? entitiesMapped.find(
-                                                        (item) => item.value === field.value,
-                                                    )?.label
-                                                    : 'Select entity'}
-                                                <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50"/>
-                                            </Button>
-                                        </FormControl>
-                                    </PopoverTrigger>
-                                    <PopoverContent className="w-[225px] p-0">
-                                        <input
-                                            value={filter}
-                                            onChange={(e) => setFilter(e.target.value)}
-                                            className="flex h-10 w-full rounded-md border-b border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
-                                            placeholder="Search..."/>
-                                        <ScrollArea className="h-64">
-                                            {entitiesMapped
-                                                .filter((entity) => entity.label.toLowerCase().includes(filter.toLowerCase()))
-                                                .map((item) => (
-                                                    <div
-                                                        className="relative flex cursor-pointer hover:bg-white/10 select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none aria-selected:bg-accent aria-selected:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50"
-                                                        key={item.value}
-                                                        onClick={() => {
-                                                            field.onChange(item.value);
-                                                            setPayorOpen(false);
-                                                        }}>
-                                                        <Check
-                                                            className={cn(
-                                                                'mr-2 h-4 w-4',
-                                                                item.value === field.value
-                                                                    ? 'opacity-100'
-                                                                    : 'opacity-0',
-                                                            )}
-                                                        />
-                                                        {item.label}
-                                                    </div>
-                                                ))}
-                                            <ScrollBar orientation="vertical"/>
-                                        </ScrollArea>
-                                    </PopoverContent>
-                                </Popover>
+                                <FormControl>
+                                    <AutoCompleteInput
+                                        placeholder="Select payor"
+                                        items={entitiesMapped}
+                                        next={payeeRef}
+                                        {...field} />
+                                </FormControl>
                                 <FormMessage/>
                             </FormItem>
                         )}
@@ -211,62 +161,13 @@ export default function PaymentForm({value, entities, categories, onSubmit, clas
                         render={({field}) => (
                             <FormItem>
                                 <FormLabel>Payee</FormLabel>
-                                <Popover open={payeeOpen} onOpenChange={(open) => {
-                                    setPayeeOpen(open);
-                                    setFilter('');
-                                }}>
-                                    <PopoverTrigger asChild>
-                                        <FormControl>
-                                            <Button
-                                                variant="outline"
-                                                role="combobox"
-                                                className={cn(
-                                                    'w-full justify-between',
-                                                    !field.value && 'text-muted-foreground',
-                                                )}
-                                            >
-                                                {field.value
-                                                    ? entitiesMapped.find(
-                                                        (item) => item.value === field.value,
-                                                    )?.label
-                                                    : 'Select entity'}
-                                                <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50"/>
-                                            </Button>
-                                        </FormControl>
-                                    </PopoverTrigger>
-                                    <PopoverContent className="w-[225px] p-0">
-                                        <input
-                                            value={filter}
-                                            onChange={(e) => setFilter(e.target.value)}
-                                            className="flex h-10 w-full rounded-md border-b border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
-                                            placeholder="Search..."/>
-                                        <ScrollArea className="h-40">
-                                            {entitiesMapped
-                                                .filter((entity) => entity.label.toLowerCase().includes(filter.toLowerCase()))
-                                                .map((item) => (
-                                                    <div
-                                                        className="relative flex cursor-pointer hover:bg-white/10 select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none aria-selected:bg-accent aria-selected:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50"
-                                                        key={item.value}
-                                                        onClick={() => {
-                                                            field.onChange(item.value);
-                                                            setPayeeOpen(false);
-                                                        }}
-                                                    >
-                                                        <Check
-                                                            className={cn(
-                                                                'mr-2 h-4 w-4',
-                                                                item.value === field.value
-                                                                    ? 'opacity-100'
-                                                                    : 'opacity-0',
-                                                            )}
-                                                        />
-                                                        {item.label}
-                                                    </div>
-                                                ))}
-                                            <ScrollBar orientation="vertical"/>
-                                        </ScrollArea>
-                                    </PopoverContent>
-                                </Popover>
+                                <FormControl ref={payeeRef}>
+                                    <AutoCompleteInput
+                                        placeholder="Select payee"
+                                        items={entitiesMapped}
+                                        next={categoryRef}
+                                        {...field} />
+                                </FormControl>
                                 <FormMessage/>
                             </FormItem>
                         )}
@@ -278,62 +179,13 @@ export default function PaymentForm({value, entities, categories, onSubmit, clas
                         render={({field}) => (
                             <FormItem>
                                 <FormLabel>Category</FormLabel>
-                                <Popover open={categoryOpen} onOpenChange={(open) => {
-                                    setCategoryOpen(open);
-                                    setFilter('');
-                                }}>
-                                    <PopoverTrigger asChild>
-                                        <FormControl>
-                                            <Button
-                                                variant="outline"
-                                                role="combobox"
-                                                className={cn(
-                                                    'w-full justify-between',
-                                                    !field.value && 'text-muted-foreground',
-                                                )}
-                                            >
-                                                {field.value
-                                                    ? categoriesMapped.find(
-                                                        (item) => item.value === field.value,
-                                                    )?.label
-                                                    : 'Select entity'}
-                                                <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50"/>
-                                            </Button>
-                                        </FormControl>
-                                    </PopoverTrigger>
-                                    <PopoverContent className="w-[225px] p-0">
-                                        <input
-                                            value={filter}
-                                            onChange={(e) => setFilter(e.target.value)}
-                                            className="flex h-10 w-full rounded-md border-b border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
-                                            placeholder="Search..."/>
-                                        <ScrollArea className="h-40">
-                                            {categoriesMapped
-                                                .filter((entity) => entity.label.toLowerCase().includes(filter.toLowerCase()))
-                                                .map((item) => (
-                                                    <div
-                                                        className="relative flex cursor-pointer hover:bg-white/10 select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none aria-selected:bg-accent aria-selected:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50"
-                                                        key={item.value}
-                                                        onClick={() => {
-                                                            field.onChange(item.value);
-                                                            setCategoryOpen(false);
-                                                        }}
-                                                    >
-                                                        <Check
-                                                            className={cn(
-                                                                'mr-2 h-4 w-4',
-                                                                item.value === field.value
-                                                                    ? 'opacity-100'
-                                                                    : 'opacity-0',
-                                                            )}
-                                                        />
-                                                        {item.label}
-                                                    </div>
-                                                ))}
-                                            <ScrollBar orientation="vertical"/>
-                                        </ScrollArea>
-                                    </PopoverContent>
-                                </Popover>
+                                <FormControl ref={categoryRef}>
+                                    <AutoCompleteInput
+                                        placeholder="Select category"
+                                        items={categoriesMapped}
+                                        next={noteRef}
+                                        {...field} />
+                                </FormControl>
                                 <FormMessage/>
                             </FormItem>
                         )}

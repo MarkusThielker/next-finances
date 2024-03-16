@@ -53,6 +53,7 @@ export default function CurrencyInput(props: TextInputProps) {
                             <Input
                                 placeholder={props.placeholder}
                                 type="text"
+                                inputMode="numeric"
                                 {...field}
                                 onChange={(ev) => {
                                     setValue(ev.target.value);
