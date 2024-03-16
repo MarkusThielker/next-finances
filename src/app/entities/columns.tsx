@@ -17,6 +17,7 @@ export const columns = (
         {
             accessorKey: 'type',
             header: 'Type',
+            size: 100,
         },
         {
             accessorKey: 'createdAt',
