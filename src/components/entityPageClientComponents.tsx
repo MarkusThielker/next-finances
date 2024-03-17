@@ -1,6 +1,6 @@
 'use client';
 
-import { Entity } from '@prisma/client';
+import { Category, Entity } from '@prisma/client';
 import React, { useState } from 'react';
 import { CellContext } from '@tanstack/table-core';
 import { Button } from '@/components/ui/button';
@@ -27,8 +27,9 @@ import {
 import { useMediaQuery } from '@/lib/hooks/useMediaQuery';
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerTrigger } from '@/components/ui/drawer';
 
-export default function EntityPageClientContent({entities, onSubmit, onDelete, className}: {
+export default function EntityPageClientContent({entities, categories, onSubmit, onDelete, className}: {
     entities: Entity[],
+    categories: Category[],
     onSubmit: (data: z.infer<typeof entityFormSchema>) => Promise<ActionResponse>,
     onDelete: (id: number) => Promise<ActionResponse>,
     className: string,
@@ -184,7 +185,7 @@ export default function EntityPageClientContent({entities, onSubmit, onDelete, c
             {/* Data Table */}
             <DataTable
                 className="w-full"
-                columns={columns(actionCell)}
+                columns={columns(actionCell, categories)}
                 data={filterEntities(entities, filter)}
                 pagination/>
 

@@ -23,9 +23,24 @@ export default async function EntitiesPage() {
         ],
     });
 
+    const categories = await prismaClient.category.findMany({
+        where: {
+            userId: user?.id,
+        },
+        orderBy: [
+            {
+                name: 'asc',
+            },
+            {
+                id: 'asc',
+            },
+        ],
+    });
+
     return (
         <EntityPageClientContent
             entities={entities}
+            categories={categories}
             onSubmit={entityCreateUpdate}
             onDelete={entityDelete}
             className="flex flex-col justify-center space-y-4"/>
