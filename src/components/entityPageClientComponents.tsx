@@ -147,6 +147,7 @@ export default function EntityPageClientContent({entities, categories, onSubmit,
                                 </DialogHeader>
                                 <EntityForm
                                     value={selectedEntity}
+                                    categories={categories}
                                     onSubmit={handleSubmit}
                                     className="grid grid-cols-1 md:grid-cols-2 gap-4 py-4"/>
                             </DialogContent>
@@ -168,6 +169,7 @@ export default function EntityPageClientContent({entities, categories, onSubmit,
                                 </DrawerHeader>
                                 <EntityForm
                                     value={selectedEntity}
+                                    categories={categories}
                                     onSubmit={handleSubmit}
                                     className="grid grid-cols-1 md:grid-cols-2 gap-4 py-4"/>
                             </DrawerContent>
