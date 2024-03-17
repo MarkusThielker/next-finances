@@ -81,14 +81,18 @@ export default async function AccountPage() {
                         </div>
                     </div>
                 </CardContent>
-                <CardFooter className="grid gap-4 grid-cols-1 md:grid-cols-2">
-                    {
-                        process.env.NODE_ENV === 'development' && (
+                {
+                    process.env.NODE_ENV === 'development' ? (
+                        <CardFooter className="grid gap-4 grid-cols-1 md:grid-cols-2">
                             <GenerateSampleDataForm onSubmit={generateSampleData}/>
-                        )
-                    }
-                    <SignOutForm onSubmit={signOut}/>
-                </CardFooter>
+                            <SignOutForm onSubmit={signOut}/>
+                        </CardFooter>
+                    ) : (
+                        <CardFooter>
+                            <SignOutForm onSubmit={signOut}/>
+                        </CardFooter>
+                    )
+                }
             </Card>
             <div className="flex w-full items-center justify-between max-w-md mt-2 text-neutral-600">
                 <p>Version {process.env.appVersion}</p>
