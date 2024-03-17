@@ -9,6 +9,7 @@ export default async function entityCreateUpdate({
     id,
     name,
     type,
+    defaultCategoryId,
 }: z.infer<typeof entityFormSchema>): Promise<ActionResponse> {
     'use server';
 
@@ -32,6 +33,7 @@ export default async function entityCreateUpdate({
                     data: {
                         name: name,
                         type: type,
+                        defaultCategoryId: defaultCategoryId,
                     },
                 },
             );
@@ -47,6 +49,7 @@ export default async function entityCreateUpdate({
                     userId: user.id,
                     name: name,
                     type: type,
+                    defaultCategoryId: defaultCategoryId,
                 },
             });
 
