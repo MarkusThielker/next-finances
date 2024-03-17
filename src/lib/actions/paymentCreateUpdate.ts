@@ -38,7 +38,7 @@ export default async function paymentCreateUpdate({
                         date: date,
                         payorId: payorId,
                         payeeId: payeeId,
-                        categoryId: categoryId,
+                        categoryId: categoryId ?? null,
                         note: note,
                     },
                 },
@@ -57,7 +57,7 @@ export default async function paymentCreateUpdate({
                     date: date,
                     payorId: payorId,
                     payeeId: payeeId,
-                    categoryId: categoryId,
+                    categoryId: categoryId ?? null,
                     note: note,
                 },
             });

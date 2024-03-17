@@ -33,7 +33,7 @@ export default async function entityCreateUpdate({
                     data: {
                         name: name,
                         type: type,
-                        defaultCategoryId: defaultCategoryId,
+                        defaultCategoryId: defaultCategoryId ?? null,
                     },
                 },
             );
@@ -49,7 +49,7 @@ export default async function entityCreateUpdate({
                     userId: user.id,
                     name: name,
                     type: type,
-                    defaultCategoryId: defaultCategoryId,
+                    defaultCategoryId: defaultCategoryId ?? null,
                 },
             });
 
