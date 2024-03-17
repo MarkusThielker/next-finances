@@ -24,6 +24,8 @@ import {
     AlertDialogFooter,
     AlertDialogHeader,
 } from '@/components/ui/alert-dialog';
+import { useMediaQuery } from '@/lib/hooks/useMediaQuery';
+import { Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerTrigger } from '@/components/ui/drawer';
 
 export default function EntityPageClientContent({entities, onSubmit, onDelete, className}: {
     entities: Entity[],
@@ -32,6 +34,7 @@ export default function EntityPageClientContent({entities, onSubmit, onDelete, c
     className: string,
 }) {
 
+    const isDesktop = useMediaQuery('(min-width: 768px)');
     const router = useRouter();
 
     const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
@@ -125,26 +128,51 @@ export default function EntityPageClientContent({entities, onSubmit, onDelete, c
                 <p className="text-3xl font-semibold">Entities</p>
 
                 {/* Edit dialog */}
-                <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
-                    <DialogTrigger asChild>
-                        <Button
-                            onClick={() => {
-                                setSelectedEntity(undefined);
-                                setIsEditDialogOpen(true);
-                            }}>
-                            Create Entity
-                        </Button>
-                    </DialogTrigger>
-                    <DialogContent>
-                        <DialogHeader>
-                            <DialogTitle>{selectedEntity?.id ? 'Update Entity' : 'Create Entity'}</DialogTitle>
-                        </DialogHeader>
-                        <EntityForm
-                            value={selectedEntity}
-                            onSubmit={handleSubmit}
-                            className="grid grid-cols-1 md:grid-cols-2 gap-4 py-4"/>
-                    </DialogContent>
-                </Dialog>
+                {
+                    isDesktop ? (
+                        <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
+                            <DialogTrigger asChild>
+                                <Button
+                                    onClick={() => {
+                                        setSelectedEntity(undefined);
+                                        setIsEditDialogOpen(true);
+                                    }}>
+                                    Create Entity
+                                </Button>
+                            </DialogTrigger>
+                            <DialogContent>
+                                <DialogHeader>
+                                    <DialogTitle>{selectedEntity?.id ? 'Update Entity' : 'Create Entity'}</DialogTitle>
+                                </DialogHeader>
+                                <EntityForm
+                                    value={selectedEntity}
+                                    onSubmit={handleSubmit}
+                                    className="grid grid-cols-1 md:grid-cols-2 gap-4 py-4"/>
+                            </DialogContent>
+                        </Dialog>
+                    ) : (
+                        <Drawer open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
+                            <DrawerTrigger asChild>
+                                <Button
+                                    onClick={() => {
+                                        setSelectedEntity(undefined);
+                                        setIsEditDialogOpen(true);
+                                    }}>
+                                    Create Entity
+                                </Button>
+                            </DrawerTrigger>
+                            <DrawerContent className="p-4">
+                                <DrawerHeader>
+                                    <DrawerTitle>{selectedEntity?.id ? 'Update Entity' : 'Create Entity'}</DrawerTitle>
+                                </DrawerHeader>
+                                <EntityForm
+                                    value={selectedEntity}
+                                    onSubmit={handleSubmit}
+                                    className="grid grid-cols-1 md:grid-cols-2 gap-4 py-4"/>
+                            </DrawerContent>
+                        </Drawer>
+                    )
+                }
             </div>
 
             {/* Filter input */}

@@ -49,7 +49,7 @@ export default function DashboardPageClientContent(
     return (
         <div className={className}>
             <div className="flex flex-col space-y-4">
-                <div className="flex items-center justify-between w-full">
+                <div className="flex items-center justify-between w-full space-x-8">
 
                     <p className="text-3xl font-semibold">Dashboard</p>
 

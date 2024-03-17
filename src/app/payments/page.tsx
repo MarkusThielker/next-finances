@@ -58,6 +58,6 @@ export default async function PaymentsPage() {
             categories={categories}
             onSubmit={paymentCreateUpdate}
             onDelete={paymentDelete}
-            className="flex flex-col justify-center space-y-4 p-10"/>
+            className="flex flex-col justify-center space-y-4"/>
     );
 }

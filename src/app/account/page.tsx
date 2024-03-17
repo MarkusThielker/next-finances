@@ -42,7 +42,7 @@ export default async function AccountPage() {
 
     return (
         <div className="flex flex-col items-center">
-            <Card className="w-full max-w-md mt-12">
+            <Card className="w-full max-w-md md:mt-12">
                 <CardHeader>
                     <CardTitle>Hey, {user?.username}!</CardTitle>
                     <CardDescription>This is your account overview.</CardDescription>
@@ -81,7 +81,7 @@ export default async function AccountPage() {
                         </div>
                     </div>
                 </CardContent>
-                <CardFooter className="space-x-4">
+                <CardFooter className="grid gap-4 grid-cols-1 md:grid-cols-2">
                     {
                         process.env.NODE_ENV === 'development' && (
                             <GenerateSampleDataForm onSubmit={generateSampleData}/>

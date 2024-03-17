@@ -18,6 +18,7 @@ export const columns = (
             cell: ({row}) => {
                 return format(row.original.date, 'PPP');
             },
+            size: 175,
         },
         {
             accessorKey: 'amount',
@@ -28,6 +29,7 @@ export const columns = (
                     currency: 'EUR',
                 }).format(row.getValue('amount') as number / 100);
             },
+            size: 70,
         },
         {
             accessorKey: 'payorId',
@@ -36,6 +38,7 @@ export const columns = (
                 const entity = entities.find((entity) => entity.id === row.original.payorId);
                 return entity?.name ?? '-';
             },
+            size: 200,
         },
         {
             accessorKey: 'payeeId',
@@ -44,6 +47,7 @@ export const columns = (
                 const entity = entities.find((entity) => entity.id === row.original.payeeId);
                 return entity?.name ?? '-';
             },
+            size: 200,
         },
         {
             accessorKey: 'categoryId',
@@ -60,10 +64,12 @@ export const columns = (
                     </div>
                 );
             },
+            size: 200,
         },
         {
             accessorKey: 'note',
             header: 'Note',
+            size: 200,
         },
         {
             id: 'actions',

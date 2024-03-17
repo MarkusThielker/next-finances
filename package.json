@@ -2,7 +2,7 @@
   "name": "next-finances",
   "description": "A finances application to keep track of my personal spendings",
   "homepage": "https://github.com/MarkusThielker/next-finances",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "license": "MIT",
   "author": {
     "name": "Markus Thielker"
@@ -50,6 +50,7 @@
     "swr": "^2.2.5",
     "tailwind-merge": "^2.2.1",
     "tailwindcss-animate": "^1.0.7",
+    "vaul": "^0.9.0",
     "zod": "^3.22.4"
   },
   "devDependencies": {
