@@ -5,11 +5,10 @@ import { redirect } from 'next/navigation';
 import signOut from '@/lib/actions/signOut';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
-import SignOutForm from '@/components/form/signOutForm';
 import { URL_SIGN_IN } from '@/lib/constants';
-import GenerateSampleDataForm from '@/components/form/generateSampleDataForm';
 import generateSampleData from '@/lib/actions/generateSampleData';
 import { prismaClient } from '@/prisma';
+import { ServerActionTrigger } from '@/components/form/serverActionTrigger';
 
 export default async function AccountPage() {
 
@@ -81,18 +80,23 @@ export default async function AccountPage() {
                         </div>
                     </div>
                 </CardContent>
-                {
-                    process.env.NODE_ENV === 'development' ? (
-                        <CardFooter className="grid gap-4 grid-cols-1 md:grid-cols-2">
-                            <GenerateSampleDataForm onSubmit={generateSampleData}/>
-                            <SignOutForm onSubmit={signOut}/>
-                        </CardFooter>
-                    ) : (
-                        <CardFooter>
-                            <SignOutForm onSubmit={signOut}/>
-                        </CardFooter>
-                    )
-                }
+                <CardFooter className="w-full grid gap-4 grid-cols-1 md:grid-cols-2">
+                    <ServerActionTrigger
+                        className="col-span-2"
+                        action={signOut}>
+                        Sign Out
+                    </ServerActionTrigger>
+                    {
+                        process.env.NODE_ENV === 'development' && (
+                            <ServerActionTrigger
+                                variant="outline"
+                                className="col-span-2"
+                                action={generateSampleData}>
+                                Generate sample data
+                            </ServerActionTrigger>
+                        )
+                    }
+                </CardFooter>
             </Card>
             <div className="flex w-full items-center justify-between max-w-md mt-2 text-neutral-600">
                 <p>Version {process.env.appVersion}</p>
