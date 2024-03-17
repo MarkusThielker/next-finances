@@ -3,6 +3,8 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react';
 import { cn } from '@/lib/utils';
+import { X } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 export interface AutoCompleteInputProps
     extends React.InputHTMLAttributes<HTMLInputElement> {
@@ -80,6 +82,20 @@ const AutoCompleteInput = React.forwardRef<HTMLInputElement, AutoCompleteInputPr
                         props.onKeyDown?.(e);
                     }}
                 />
+                {
+                    value.length > 0 && (
+                        <Button
+                            className="absolute end-0 top-0 z-10"
+                            size="icon"
+                            variant="ghost"
+                            onClick={() => {
+                                handleChange({target: {value: ''}} as any);
+                            }}
+                        >
+                            <X className="h-4 w-4"/>
+                        </Button>
+                    )
+                }
                 {
                     open && (
                         <div
