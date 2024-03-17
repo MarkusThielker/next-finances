@@ -13,12 +13,12 @@ export interface AutoCompleteInputProps
 const AutoCompleteInput = React.forwardRef<HTMLInputElement, AutoCompleteInputProps>(
     ({className, type, ...props}, ref) => {
 
-        const [value, setValue] = useState(getInitialValue());
+        const [value, setValue] = useState(getNameOfPropValue());
         const [open, setOpen] = useState(false);
         const [lastKey, setLastKey] = useState('');
         const [filteredItems, setFilteredItems] = useState(props.items);
 
-        function getInitialValue() {
+        function getNameOfPropValue() {
 
             if (!props.items) {
                 return '';
@@ -49,6 +49,15 @@ const AutoCompleteInput = React.forwardRef<HTMLInputElement, AutoCompleteInputPr
                 props.next && props.next.current?.focus();
             }
         }, [filteredItems]);
+
+        useEffect(() => {
+            console.log('Prop value changed', value, props.value);
+            if (props.value) {
+                setValue(getNameOfPropValue());
+            } else {
+                setValue('');
+            }
+        }, [props.value]);
 
         return (
             <div className="relative">
