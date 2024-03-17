@@ -23,6 +23,8 @@ import { paymentFormSchema } from '@/lib/form-schemas/paymentFormSchema';
 import { Category, Entity, Payment } from '@prisma/client';
 import PaymentForm from '@/components/form/paymentForm';
 import { columns } from '@/app/payments/columns';
+import { Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerTrigger } from '@/components/ui/drawer';
+import { useMediaQuery } from '@/lib/hooks/useMediaQuery';
 
 export default function PaymentPageClientContent({
     payments,
@@ -40,6 +42,7 @@ export default function PaymentPageClientContent({
     className: string,
 }) {
 
+    const isDesktop = useMediaQuery('(min-width: 768px)');
     const router = useRouter();
 
     const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
@@ -106,28 +109,55 @@ export default function PaymentPageClientContent({
                 <p className="text-3xl font-semibold">Payments</p>
 
                 {/* Edit dialog */}
-                <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
-                    <DialogTrigger asChild>
-                        <Button
-                            onClick={() => {
-                                setSelectedPayment(undefined);
-                                setIsEditDialogOpen(true);
-                            }}>
-                            Create Payment
-                        </Button>
-                    </DialogTrigger>
-                    <DialogContent>
-                        <DialogHeader>
-                            <DialogTitle>{selectedPayment?.id ? 'Update Payment' : 'Create Payment'}</DialogTitle>
-                        </DialogHeader>
-                        <PaymentForm
-                            value={selectedPayment}
-                            entities={entities}
-                            categories={categories}
-                            onSubmit={handleSubmit}
-                            className="grid grid-cols-1 md:grid-cols-2 gap-4 py-4"/>
-                    </DialogContent>
-                </Dialog>
+                {
+                    isDesktop ? (
+                        <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
+                            <DialogTrigger asChild>
+                                <Button
+                                    onClick={() => {
+                                        setSelectedPayment(undefined);
+                                        setIsEditDialogOpen(true);
+                                    }}>
+                                    Create Payment
+                                </Button>
+                            </DialogTrigger>
+                            <DialogContent>
+                                <DialogHeader>
+                                    <DialogTitle>{selectedPayment?.id ? 'Update Payment' : 'Create Payment'}</DialogTitle>
+                                </DialogHeader>
+                                <PaymentForm
+                                    value={selectedPayment}
+                                    entities={entities}
+                                    categories={categories}
+                                    onSubmit={handleSubmit}
+                                    className="grid grid-cols-1 md:grid-cols-2 gap-4 py-4"/>
+                            </DialogContent>
+                        </Dialog>
+                    ) : (
+                        <Drawer open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
+                            <DrawerTrigger asChild>
+                                <Button
+                                    onClick={() => {
+                                        setSelectedPayment(undefined);
+                                        setIsEditDialogOpen(true);
+                                    }}>
+                                    Create Payment
+                                </Button>
+                            </DrawerTrigger>
+                            <DrawerContent className="p-4">
+                                <DrawerHeader>
+                                    <DrawerTitle>{selectedPayment?.id ? 'Update Payment' : 'Create Payment'}</DrawerTitle>
+                                </DrawerHeader>
+                                <PaymentForm
+                                    value={selectedPayment}
+                                    entities={entities}
+                                    categories={categories}
+                                    onSubmit={handleSubmit}
+                                    className="grid grid-cols-1 md:grid-cols-2 gap-4 py-4"/>
+                            </DrawerContent>
+                        </Drawer>
+                    )
+                }
             </div>
 
             {/* Data Table */}
