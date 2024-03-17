@@ -9,6 +9,7 @@ import { URL_SIGN_IN } from '@/lib/constants';
 import generateSampleData from '@/lib/actions/generateSampleData';
 import { prismaClient } from '@/prisma';
 import { ServerActionTrigger } from '@/components/form/serverActionTrigger';
+import accountDelete from '@/lib/actions/accountDelete';
 
 export default async function AccountPage() {
 
@@ -82,7 +83,16 @@ export default async function AccountPage() {
                 </CardContent>
                 <CardFooter className="w-full grid gap-4 grid-cols-1 md:grid-cols-2">
                     <ServerActionTrigger
-                        className="col-span-2"
+                        action={accountDelete}
+                        dialog={{
+                            title: 'Delete Account',
+                            description: 'Are you sure you want to delete your account? This action is irreversible.',
+                            actionText: 'Delete Account',
+                        }}
+                        variant="outline">
+                        Delete Account
+                    </ServerActionTrigger>
+                    <ServerActionTrigger
                         action={signOut}>
                         Sign Out
                     </ServerActionTrigger>
