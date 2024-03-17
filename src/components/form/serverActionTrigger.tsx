@@ -9,11 +9,29 @@ import { toast } from 'sonner';
 import { sonnerContent } from '@/components/ui/sonner';
 import type { VariantProps } from 'class-variance-authority';
 import { ActionResponse } from '@/lib/types/actionResponse';
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
+
+export interface ConfirmationDialogProps {
+    title: string;
+    description?: string;
+    actionText?: string;
+}
 
 export interface ButtonWithActionProps<T = any>
     extends React.ButtonHTMLAttributes<HTMLButtonElement>,
         VariantProps<typeof buttonVariants> {
     asChild?: boolean;
+    dialog?: ConfirmationDialogProps;
     action: () => Promise<ActionResponse<T>>;
     callback?: (data: T) => void;
 }
@@ -36,14 +54,40 @@ const ServerActionTrigger = React.forwardRef<HTMLButtonElement, ButtonWithAction
             }
         };
 
-        // TODO: add optional confirmation dialog
-
-        return (
+        return props.dialog ? (
+            <AlertDialog>
+                <AlertDialogTrigger asChild>
+                    <Comp
+                        className={cn(buttonVariants({variant, size, className}))}
+                        {...{...props, action: undefined, callback: undefined}}
+                        ref={ref}
+                    />
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>{props.dialog.title}</AlertDialogTitle>
+                        {props.dialog?.description && (
+                            <AlertDialogDescription>
+                                {props.dialog.description}
+                            </AlertDialogDescription>
+                        )}
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogCancel>
+                            Cancel
+                        </AlertDialogCancel>
+                        <AlertDialogAction onClick={handleSubmit}>
+                            {props.dialog.actionText || 'Confirm'}
+                        </AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
+        ) : (
             <Comp
                 className={cn(buttonVariants({variant, size, className}))}
                 ref={ref}
-                {...{...props, action: undefined, callback: undefined}}
                 onClick={handleSubmit}
+                {...props}
             />
         );
     },
