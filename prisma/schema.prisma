@@ -34,13 +34,15 @@ model Session {
 }
 
 model Entity {
-  id        Int        @id @default(autoincrement())
-  userId    String     @map("user_id")
-  user      User       @relation(fields: [userId], references: [id])
-  name      String
-  type      EntityType
-  createdAt DateTime   @default(now()) @map("created_at")
-  updatedAt DateTime   @updatedAt @map("updated_at")
+  id                Int        @id @default(autoincrement())
+  userId            String     @map("user_id")
+  user              User       @relation(fields: [userId], references: [id])
+  name              String
+  type              EntityType
+  defaultCategory   Category?  @relation(fields: [defaultCategoryId], references: [id])
+  defaultCategoryId Int?       @map("default_category_id")
+  createdAt         DateTime   @default(now()) @map("created_at")
+  updatedAt         DateTime   @updatedAt @map("updated_at")
 
   paymentsAsPayor Payment[] @relation("PayorEntity")
   paymentsAsPayee Payment[] @relation("PayeeEntity")
@@ -84,6 +86,7 @@ model Category {
   updatedAt DateTime @updatedAt @map("updated_at")
 
   payments Payment[]
+  Entity   Entity[]
 
   @@unique(fields: [userId, name])
   @@map("categories")
