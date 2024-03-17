@@ -59,7 +59,7 @@ const ServerActionTrigger = React.forwardRef<HTMLButtonElement, ButtonWithAction
                 <AlertDialogTrigger asChild>
                     <Comp
                         className={cn(buttonVariants({variant, size, className}))}
-                        {...{...props, action: undefined, callback: undefined}}
+                        {...{...props, dialog: undefined, action: undefined, callback: undefined}}
                         ref={ref}
                     />
                 </AlertDialogTrigger>
@@ -87,7 +87,7 @@ const ServerActionTrigger = React.forwardRef<HTMLButtonElement, ButtonWithAction
                 className={cn(buttonVariants({variant, size, className}))}
                 ref={ref}
                 onClick={handleSubmit}
-                {...props}
+                {...{...props, dialog: undefined, action: undefined, callback: undefined}}
             />
         );
     },
