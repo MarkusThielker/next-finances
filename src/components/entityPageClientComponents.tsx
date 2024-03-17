@@ -158,7 +158,7 @@ export default function EntityPageClientContent({entities, onSubmit, onDelete, c
                                         setSelectedEntity(undefined);
                                         setIsEditDialogOpen(true);
                                     }}>
-                                    Create Payment
+                                    Create Entity
                                 </Button>
                             </DrawerTrigger>
                             <DrawerContent className="p-4">

@@ -130,7 +130,7 @@ export default function CategoryPageClientContent({categories, onSubmit, onDelet
                                         setSelectedCategory(undefined);
                                         setIsEditDialogOpen(true);
                                     }}>
-                                    Create Payment
+                                    Create Category
                                 </Button>
                             </DrawerTrigger>
                             <DrawerContent className="p-4">
