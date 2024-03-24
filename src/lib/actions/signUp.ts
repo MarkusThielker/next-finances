@@ -6,7 +6,7 @@ import { cookies } from 'next/headers';
 import { signUpFormSchema } from '@/lib/form-schemas/signUpFormSchema';
 import { ActionResponse } from '@/lib/types/actionResponse';
 import { URL_HOME } from '@/lib/constants';
-import { prismaClient } from '@/prisma';
+import prisma from '@/prisma';
 
 export default async function signUp({username, password}: z.infer<typeof signUpFormSchema>): Promise<ActionResponse> {
     'use server';
@@ -14,7 +14,7 @@ export default async function signUp({username, password}: z.infer<typeof signUp
     const hashedPassword = await new Argon2id().hash(password);
     const userId = generateId(15);
 
-    const existingUser = await prismaClient.user.findFirst({
+    const existingUser = await prisma.user.findFirst({
         where: {
             username: username.toLowerCase(),
         },
@@ -27,7 +27,7 @@ export default async function signUp({username, password}: z.infer<typeof signUp
         };
     }
 
-    await prismaClient.user.create({
+    await prisma.user.create({
         data: {
             id: userId,
             username: username,

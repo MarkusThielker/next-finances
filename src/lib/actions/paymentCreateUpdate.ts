@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { ActionResponse } from '@/lib/types/actionResponse';
-import { prismaClient } from '@/prisma';
+import prisma from '@/prisma';
 import { getUser } from '@/auth';
 import { URL_SIGN_IN } from '@/lib/constants';
 import { paymentFormSchema } from '@/lib/form-schemas/paymentFormSchema';
@@ -29,7 +29,7 @@ export default async function paymentCreateUpdate({
     // create/update payment
     try {
         if (id) {
-            await prismaClient.payment.update({
+            await prisma.payment.update({
                     where: {
                         id: id,
                     },
@@ -50,7 +50,7 @@ export default async function paymentCreateUpdate({
                 message: `Payment updated`,
             };
         } else {
-            await prismaClient.payment.create({
+            await prisma.payment.create({
                 data: {
                     userId: user.id,
                     amount: amount,

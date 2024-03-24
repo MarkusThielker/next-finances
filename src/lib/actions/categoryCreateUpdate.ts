@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { ActionResponse } from '@/lib/types/actionResponse';
-import { prismaClient } from '@/prisma';
+import prisma from '@/prisma';
 import { getUser } from '@/auth';
 import { URL_SIGN_IN } from '@/lib/constants';
 import { categoryFormSchema } from '@/lib/form-schemas/categoryFormSchema';
@@ -25,7 +25,7 @@ export default async function categoryCreateUpdate({
     // create/update category
     try {
         if (id) {
-            await prismaClient.category.update({
+            await prisma.category.update({
                     where: {
                         id: id,
                     },
@@ -42,7 +42,7 @@ export default async function categoryCreateUpdate({
                 message: `'${name}' updated`,
             };
         } else {
-            await prismaClient.category.create({
+            await prisma.category.create({
                 data: {
                     userId: user.id,
                     name: name,

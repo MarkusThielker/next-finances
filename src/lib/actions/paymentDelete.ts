@@ -1,5 +1,5 @@
 import { ActionResponse } from '@/lib/types/actionResponse';
-import { prismaClient } from '@/prisma';
+import prisma from '@/prisma';
 import { getUser } from '@/auth';
 import { URL_SIGN_IN } from '@/lib/constants';
 
@@ -25,7 +25,7 @@ export default async function paymentDelete(id: number): Promise<ActionResponse>
     }
 
     // check that payment is associated with user
-    const payment = await prismaClient.payment.findFirst({
+    const payment = await prisma.payment.findFirst({
         where: {
             id: id,
             userId: user.id,
@@ -40,7 +40,7 @@ export default async function paymentDelete(id: number): Promise<ActionResponse>
 
     // delete payment
     try {
-        await prismaClient.payment.delete({
+        await prisma.payment.delete({
                 where: {
                     id: payment.id,
                     userId: user.id,
