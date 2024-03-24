@@ -25,7 +25,7 @@ services:
     restart: unless-stopped
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.xyz-next-finances.rule=Host(`finances.thielker.xyz`)"
+      - "traefik.http.routers.xyz-next-finances.rule=Host(`${APPLICATION_DOMAIN}`)"
       - "traefik.http.routers.xyz-next-finances.entrypoints=web, websecure"
       - "traefik.http.routers.xyz-next-finances.tls=true"
       - "traefik.http.routers.xyz-next-finances.tls.certresolver=lets-encrypt"
@@ -46,7 +46,7 @@ services:
     restart: unless-stopped
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.xyz-next-finances-studio.rule=Host(`studio.finances.thielker.xyz`)"
+      - "traefik.http.routers.xyz-next-finances-studio.rule=Host(`studio.${APPLICATION_DOMAIN}`)"
       - "traefik.http.routers.xyz-next-finances-studio.entrypoints=web, websecure"
       - "traefik.http.services.xyz-next-finances-studio.loadbalancer.server.port=5555"
       - "traefik.http.routers.xyz-next-finances-studio.tls=true"
