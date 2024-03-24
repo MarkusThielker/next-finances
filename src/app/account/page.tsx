@@ -7,7 +7,7 @@ import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { URL_SIGN_IN } from '@/lib/constants';
 import generateSampleData from '@/lib/actions/generateSampleData';
-import { prismaClient } from '@/prisma';
+import prisma from '@/prisma';
 import { ServerActionTrigger } from '@/components/form/serverActionTrigger';
 import accountDelete from '@/lib/actions/accountDelete';
 
@@ -20,21 +20,21 @@ export default async function AccountPage() {
     }
 
     let paymentCount = 0;
-    paymentCount = await prismaClient.payment.count({
+    paymentCount = await prisma.payment.count({
         where: {
             userId: user.id,
         },
     });
 
     let entityCount = 0;
-    entityCount = await prismaClient.entity.count({
+    entityCount = await prisma.entity.count({
         where: {
             userId: user.id,
         },
     });
 
     let categoryCount = 0;
-    categoryCount = await prismaClient.category.count({
+    categoryCount = await prisma.category.count({
         where: {
             userId: user.id,
         },

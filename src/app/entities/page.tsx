@@ -1,4 +1,4 @@
-import { prismaClient } from '@/prisma';
+import prisma from '@/prisma';
 import { getUser } from '@/auth';
 import React from 'react';
 import EntityPageClientContent from '@/components/entityPageClientComponents';
@@ -9,7 +9,7 @@ export default async function EntitiesPage() {
 
     const user = await getUser();
 
-    const entities = await prismaClient.entity.findMany({
+    const entities = await prisma.entity.findMany({
         where: {
             userId: user?.id,
         },
@@ -23,7 +23,7 @@ export default async function EntitiesPage() {
         ],
     });
 
-    const categories = await prismaClient.category.findMany({
+    const categories = await prisma.category.findMany({
         where: {
             userId: user?.id,
         },

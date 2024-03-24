@@ -1,5 +1,5 @@
 import { ActionResponse } from '@/lib/types/actionResponse';
-import { prismaClient } from '@/prisma';
+import prisma from '@/prisma';
 import { getUser } from '@/auth';
 import { URL_SIGN_IN } from '@/lib/constants';
 
@@ -25,7 +25,7 @@ export default async function categoryDelete(id: number): Promise<ActionResponse
     }
 
     // check that category is associated with user
-    const category = await prismaClient.category.findFirst({
+    const category = await prisma.category.findFirst({
         where: {
             id: id,
             userId: user.id,
@@ -40,7 +40,7 @@ export default async function categoryDelete(id: number): Promise<ActionResponse
 
     // delete category
     try {
-        await prismaClient.category.delete({
+        await prisma.category.delete({
                 where: {
                     id: category.id,
                     userId: user.id,

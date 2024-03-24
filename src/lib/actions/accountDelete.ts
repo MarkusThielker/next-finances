@@ -1,7 +1,7 @@
 import { ActionResponse } from '@/lib/types/actionResponse';
 import { URL_SIGN_IN } from '@/lib/constants';
 import { getUser, lucia } from '@/auth';
-import { prismaClient } from '@/prisma';
+import prisma from '@/prisma';
 import { cookies } from 'next/headers';
 
 export default async function accountDelete(): Promise<ActionResponse> {
@@ -17,31 +17,31 @@ export default async function accountDelete(): Promise<ActionResponse> {
         };
     }
 
-    await prismaClient.payment.deleteMany({
+    await prisma.payment.deleteMany({
         where: {
             userId: user.id,
         },
     });
 
-    await prismaClient.entity.deleteMany({
+    await prisma.entity.deleteMany({
         where: {
             userId: user.id,
         },
     });
 
-    await prismaClient.category.deleteMany({
+    await prisma.category.deleteMany({
         where: {
             userId: user.id,
         },
     });
 
-    await prismaClient.session.deleteMany({
+    await prisma.session.deleteMany({
         where: {
             userId: user.id,
         },
     });
 
-    await prismaClient.user.delete({
+    await prisma.user.delete({
         where: {
             id: user.id,
         },
