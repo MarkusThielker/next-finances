@@ -12,11 +12,13 @@ import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 import { sonnerContent } from '@/components/ui/sonner';
 import { entityFormSchema } from '@/lib/form-schemas/entityFormSchema';
-import { Entity, EntityType } from '@prisma/client';
+import { Category, Entity, EntityType } from '@prisma/client';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { AutoCompleteInput } from '@/components/ui/auto-complete-input';
 
-export default function EntityForm({value, onSubmit, className}: {
+export default function EntityForm({value, categories, onSubmit, className}: {
     value: Entity | undefined,
+    categories: Category[],
     onSubmit: (data: z.infer<typeof entityFormSchema>) => Promise<ActionResponse>
     className?: string
 }) {
@@ -29,6 +31,7 @@ export default function EntityForm({value, onSubmit, className}: {
             id: value?.id ?? undefined,
             name: value?.name ?? '',
             type: value?.type ?? EntityType.Entity,
+            defaultCategoryId: value?.defaultCategoryId ?? undefined,
         },
     });
 
@@ -39,6 +42,13 @@ export default function EntityForm({value, onSubmit, className}: {
             router.push(response.redirect);
         }
     };
+
+    const categoriesMapped = categories?.map((category) => {
+        return {
+            label: category.name,
+            value: category.id,
+        };
+    }) ?? [];
 
     return (
         <Form {...form}>
@@ -90,6 +100,22 @@ export default function EntityForm({value, onSubmit, className}: {
                                         </SelectGroup>
                                     </SelectContent>
                                 </Select>
+                                <FormMessage/>
+                            </FormItem>
+                        )}
+                    />
+                    <FormField
+                        control={form.control}
+                        name="defaultCategoryId"
+                        render={({field}) => (
+                            <FormItem>
+                                <FormLabel>Category</FormLabel>
+                                <FormControl>
+                                    <AutoCompleteInput
+                                        placeholder="Select category"
+                                        items={categoriesMapped}
+                                        {...field} />
+                                </FormControl>
                                 <FormMessage/>
                             </FormItem>
                         )}

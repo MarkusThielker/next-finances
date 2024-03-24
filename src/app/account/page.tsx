@@ -5,11 +5,11 @@ import { redirect } from 'next/navigation';
 import signOut from '@/lib/actions/signOut';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
-import SignOutForm from '@/components/form/signOutForm';
 import { URL_SIGN_IN } from '@/lib/constants';
-import GenerateSampleDataForm from '@/components/form/generateSampleDataForm';
 import generateSampleData from '@/lib/actions/generateSampleData';
-import { prismaClient } from '@/prisma';
+import prisma from '@/prisma';
+import { ServerActionTrigger } from '@/components/form/serverActionTrigger';
+import accountDelete from '@/lib/actions/accountDelete';
 
 export default async function AccountPage() {
 
@@ -20,21 +20,21 @@ export default async function AccountPage() {
     }
 
     let paymentCount = 0;
-    paymentCount = await prismaClient.payment.count({
+    paymentCount = await prisma.payment.count({
         where: {
             userId: user.id,
         },
     });
 
     let entityCount = 0;
-    entityCount = await prismaClient.entity.count({
+    entityCount = await prisma.entity.count({
         where: {
             userId: user.id,
         },
     });
 
     let categoryCount = 0;
-    categoryCount = await prismaClient.category.count({
+    categoryCount = await prisma.category.count({
         where: {
             userId: user.id,
         },
@@ -81,13 +81,31 @@ export default async function AccountPage() {
                         </div>
                     </div>
                 </CardContent>
-                <CardFooter className="grid gap-4 grid-cols-1 md:grid-cols-2">
+                <CardFooter className="w-full grid gap-4 grid-cols-1 md:grid-cols-2">
+                    <ServerActionTrigger
+                        action={accountDelete}
+                        dialog={{
+                            title: 'Delete Account',
+                            description: 'Are you sure you want to delete your account? This action is irreversible.',
+                            actionText: 'Delete Account',
+                        }}
+                        variant="outline">
+                        Delete Account
+                    </ServerActionTrigger>
+                    <ServerActionTrigger
+                        action={signOut}>
+                        Sign Out
+                    </ServerActionTrigger>
                     {
                         process.env.NODE_ENV === 'development' && (
-                            <GenerateSampleDataForm onSubmit={generateSampleData}/>
+                            <ServerActionTrigger
+                                variant="outline"
+                                className="col-span-2"
+                                action={generateSampleData}>
+                                Generate sample data
+                            </ServerActionTrigger>
                         )
                     }
-                    <SignOutForm onSubmit={signOut}/>
                 </CardFooter>
             </Card>
             <div className="flex w-full items-center justify-between max-w-md mt-2 text-neutral-600">

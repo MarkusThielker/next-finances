@@ -1,4 +1,4 @@
-import { prismaClient } from '@/prisma';
+import prisma from '@/prisma';
 import type { Category, Entity } from '@prisma/client';
 import { EntityType } from '@prisma/client';
 import { getUser } from '@/auth';
@@ -19,12 +19,12 @@ export default async function generateSampleData(): Promise<ActionResponse> {
     }
 
     // Categories: create sample data
-    const categories: Category[] = await prismaClient.category.findMany({where: {userId: user.id}});
-    if (await prismaClient.category.count({where: {userId: user.id}}) == 0) {
+    const categories: Category[] = await prisma.category.findMany({where: {userId: user.id}});
+    if (await prisma.category.count({where: {userId: user.id}}) == 0) {
 
         console.log('Creating sample categories...');
 
-        categories.push(await prismaClient.category.create({
+        categories.push(await prisma.category.create({
             data: {
                 userId: user.id,
                 name: 'Groceries',
@@ -32,7 +32,7 @@ export default async function generateSampleData(): Promise<ActionResponse> {
             },
         }));
 
-        categories.push(await prismaClient.category.create({
+        categories.push(await prisma.category.create({
             data: {
                 userId: user.id,
                 name: 'Drugstore items',
@@ -40,7 +40,7 @@ export default async function generateSampleData(): Promise<ActionResponse> {
             },
         }));
 
-        categories.push(await prismaClient.category.create({
+        categories.push(await prisma.category.create({
             data: {
                 userId: user.id,
                 name: 'Going out',
@@ -48,7 +48,7 @@ export default async function generateSampleData(): Promise<ActionResponse> {
             },
         }));
 
-        categories.push(await prismaClient.category.create({
+        categories.push(await prisma.category.create({
             data: {
                 userId: user.id,
                 name: 'Random stuff',
@@ -56,7 +56,7 @@ export default async function generateSampleData(): Promise<ActionResponse> {
             },
         }));
 
-        categories.push(await prismaClient.category.create({
+        categories.push(await prisma.category.create({
             data: {
                 userId: user.id,
                 name: 'Salary',
@@ -69,12 +69,12 @@ export default async function generateSampleData(): Promise<ActionResponse> {
     console.log(categories);
 
     // Entities: create sample data
-    const entities: Entity[] = await prismaClient.entity.findMany({where: {userId: user.id}});
-    if (await prismaClient.entity.count({where: {userId: user.id}}) == 0) {
+    const entities: Entity[] = await prisma.entity.findMany({where: {userId: user.id}});
+    if (await prisma.entity.count({where: {userId: user.id}}) == 0) {
 
         console.log('Creating sample entities...');
 
-        entities.push(await prismaClient.entity.create({
+        entities.push(await prisma.entity.create({
             data: {
                 userId: user.id,
                 name: 'Main Account',
@@ -82,7 +82,7 @@ export default async function generateSampleData(): Promise<ActionResponse> {
             },
         }));
 
-        entities.push(await prismaClient.entity.create({
+        entities.push(await prisma.entity.create({
             data: {
                 userId: user.id,
                 name: 'Company',
@@ -90,7 +90,7 @@ export default async function generateSampleData(): Promise<ActionResponse> {
             },
         }));
 
-        entities.push(await prismaClient.entity.create({
+        entities.push(await prisma.entity.create({
             data: {
                 userId: user.id,
                 name: 'Supermarket 1',
@@ -98,7 +98,7 @@ export default async function generateSampleData(): Promise<ActionResponse> {
             },
         }));
 
-        entities.push(await prismaClient.entity.create({
+        entities.push(await prisma.entity.create({
             data: {
                 userId: user.id,
                 name: 'Supermarket 2',
@@ -106,7 +106,7 @@ export default async function generateSampleData(): Promise<ActionResponse> {
             },
         }));
 
-        entities.push(await prismaClient.entity.create({
+        entities.push(await prisma.entity.create({
             data: {
                 userId: user.id,
                 name: 'Supermarket 3',
@@ -114,7 +114,7 @@ export default async function generateSampleData(): Promise<ActionResponse> {
             },
         }));
 
-        entities.push(await prismaClient.entity.create({
+        entities.push(await prisma.entity.create({
             data: {
                 userId: user.id,
                 name: 'Supermarket 4',
@@ -129,14 +129,14 @@ export default async function generateSampleData(): Promise<ActionResponse> {
     // Payments: create sample data
     console.log('Creating sample payments...');
 
-    if (await prismaClient.payment.count({where: {userId: user.id}}) == 0) {
+    if (await prisma.payment.count({where: {userId: user.id}}) == 0) {
         for (let i = 0; i < 4; i++) {
 
             const date = new Date();
             date.setDate(1);
             date.setMonth(date.getMonth() - i);
 
-            await prismaClient.payment.create({
+            await prisma.payment.create({
                 data: {
                     userId: user.id,
                     amount: 200000,
@@ -164,7 +164,7 @@ export default async function generateSampleData(): Promise<ActionResponse> {
         const date = new Date(
             new Date().getTime() - Math.floor(Math.random() * 10000000000));
 
-        await prismaClient.payment.create({
+        await prisma.payment.create({
             data: {
                 userId: user.id,
                 amount: Math.floor(

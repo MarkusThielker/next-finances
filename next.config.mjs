@@ -1,5 +1,11 @@
-/** @type {import('next').NextConfig} */
-const nextConfig = {
+import withSerwistInit from '@serwist/next';
+
+const withSerwist = withSerwistInit({
+    swSrc: 'src/app/service-worker.ts',
+    swDest: 'public/sw.js',
+});
+
+export default withSerwist({
     webpack: (config) => {
         config.externals.push(
             '@node-rs/argon2',
@@ -11,6 +17,4 @@ const nextConfig = {
     env: {
         appVersion: process.env.npm_package_version,
     },
-};
-
-export default nextConfig;
+});

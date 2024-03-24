@@ -1,5 +1,5 @@
 import { getUser } from '@/auth';
-import { prismaClient } from '@/prisma';
+import prisma from '@/prisma';
 import React from 'react';
 import CategoryPageClientContent from '@/components/categoryPageClientComponents';
 import categoryCreateUpdate from '@/lib/actions/categoryCreateUpdate';
@@ -9,7 +9,7 @@ export default async function CategoriesPage() {
 
     const user = await getUser();
 
-    const categories = await prismaClient.category.findMany({
+    const categories = await prisma.category.findMany({
         where: {
             userId: user?.id,
         },

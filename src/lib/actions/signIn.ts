@@ -5,12 +5,12 @@ import { cookies } from 'next/headers';
 import { signInFormSchema } from '@/lib/form-schemas/signInFormSchema';
 import { ActionResponse } from '@/lib/types/actionResponse';
 import { URL_HOME } from '@/lib/constants';
-import { prismaClient } from '@/prisma';
+import prisma from '@/prisma';
 
 export default async function signIn({username, password}: z.infer<typeof signInFormSchema>): Promise<ActionResponse> {
     'use server';
 
-    const existingUser = await prismaClient.user.findFirst({
+    const existingUser = await prisma.user.findFirst({
         where: {
             username: username.toLowerCase(),
         },

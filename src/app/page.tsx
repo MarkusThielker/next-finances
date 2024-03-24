@@ -1,7 +1,7 @@
 import React from 'react';
 import { Category, Entity, EntityType } from '@prisma/client';
 import { Scope, ScopeType } from '@/lib/types/scope';
-import { prismaClient } from '@/prisma';
+import prisma from '@/prisma';
 import { getUser } from '@/auth';
 import DashboardPageClient from '@/components/dashboardPageClientComponents';
 
@@ -25,7 +25,7 @@ export default async function DashboardPage(props: { searchParams?: { scope: Sco
     const scope = Scope.of(props.searchParams?.scope || ScopeType.ThisMonth);
 
     // get all payments in the current scope
-    const payments = await prismaClient.payment.findMany({
+    const payments = await prisma.payment.findMany({
         where: {
             userId: user?.id,
             date: {
@@ -108,6 +108,7 @@ export default async function DashboardPage(props: { searchParams?: { scope: Sco
             userId: '',
             name: 'Other',
             type: EntityType.Entity,
+            defaultCategoryId: null,
             createdAt: new Date(),
             updatedAt: new Date(),
         },

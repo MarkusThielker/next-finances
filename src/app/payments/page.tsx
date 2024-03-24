@@ -1,5 +1,5 @@
 import { getUser } from '@/auth';
-import { prismaClient } from '@/prisma';
+import prisma from '@/prisma';
 import React from 'react';
 import PaymentPageClientContent from '@/components/paymentPageClientComponents';
 import paymentCreateUpdate from '@/lib/actions/paymentCreateUpdate';
@@ -9,7 +9,7 @@ export default async function PaymentsPage() {
 
     const user = await getUser();
 
-    const payments = await prismaClient.payment.findMany({
+    const payments = await prisma.payment.findMany({
         where: {
             userId: user?.id,
         },
@@ -23,7 +23,7 @@ export default async function PaymentsPage() {
         ],
     });
 
-    const entities = await prismaClient.entity.findMany({
+    const entities = await prisma.entity.findMany({
         where: {
             userId: user?.id,
         },
@@ -37,7 +37,7 @@ export default async function PaymentsPage() {
         ],
     });
 
-    const categories = await prismaClient.category.findMany({
+    const categories = await prisma.category.findMany({
         where: {
             userId: user?.id,
         },

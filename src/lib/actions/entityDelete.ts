@@ -1,5 +1,5 @@
 import { ActionResponse } from '@/lib/types/actionResponse';
-import { prismaClient } from '@/prisma';
+import prisma from '@/prisma';
 import { getUser } from '@/auth';
 import { URL_SIGN_IN } from '@/lib/constants';
 
@@ -25,7 +25,7 @@ export default async function entityDelete(id: number): Promise<ActionResponse> 
     }
 
     // check that entity is associated with user
-    const entity = await prismaClient.entity.findFirst({
+    const entity = await prisma.entity.findFirst({
         where: {
             id: id,
             userId: user.id,
@@ -40,7 +40,7 @@ export default async function entityDelete(id: number): Promise<ActionResponse> 
 
     // delete entity
     try {
-        await prismaClient.entity.delete({
+        await prisma.entity.delete({
                 where: {
                     id: entity.id,
                     userId: user.id,

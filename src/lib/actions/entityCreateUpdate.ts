@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { ActionResponse } from '@/lib/types/actionResponse';
 import { entityFormSchema } from '@/lib/form-schemas/entityFormSchema';
-import { prismaClient } from '@/prisma';
+import prisma from '@/prisma';
 import { getUser } from '@/auth';
 import { URL_SIGN_IN } from '@/lib/constants';
 
@@ -9,6 +9,7 @@ export default async function entityCreateUpdate({
     id,
     name,
     type,
+    defaultCategoryId,
 }: z.infer<typeof entityFormSchema>): Promise<ActionResponse> {
     'use server';
 
@@ -25,13 +26,14 @@ export default async function entityCreateUpdate({
     // create/update entity
     try {
         if (id) {
-            await prismaClient.entity.update({
+            await prisma.entity.update({
                     where: {
                         id: id,
                     },
                     data: {
                         name: name,
                         type: type,
+                        defaultCategoryId: defaultCategoryId ?? null,
                     },
                 },
             );
@@ -42,11 +44,12 @@ export default async function entityCreateUpdate({
                 message: `${type} '${name}' updated`,
             };
         } else {
-            await prismaClient.entity.create({
+            await prisma.entity.create({
                 data: {
                     userId: user.id,
                     name: name,
                     type: type,
+                    defaultCategoryId: defaultCategoryId ?? null,
                 },
             });
 

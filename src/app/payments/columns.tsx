@@ -55,13 +55,19 @@ export const columns = (
             cell: ({row}) => {
                 const category = categories.find((category) => category.id === row.original.categoryId);
                 return (
-                    <div className="flex items-center space-x-4">
-                        <svg className="h-5" fill={category?.color} viewBox="0 0 20 20"
-                             xmlns="http://www.w3.org/2000/svg">
-                            <circle cx="10" cy="10" r="10"/>
-                        </svg>
-                        <p>{category?.name ?? '-'}</p>
-                    </div>
+                    <>
+                        {
+                            category && (
+                                <div className="flex items-center space-x-4">
+                                    <svg className="h-5" fill={category?.color} viewBox="0 0 20 20"
+                                         xmlns="http://www.w3.org/2000/svg">
+                                        <circle cx="10" cy="10" r="10"/>
+                                    </svg>
+                                    <p>{category?.name ?? '-'}</p>
+                                </div>
+                            )
+                        }
+                    </>
                 );
             },
             size: 200,

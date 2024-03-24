@@ -166,7 +166,17 @@ export default function PaymentForm({value, entities, categories, onSubmit, clas
                                         placeholder="Select payee"
                                         items={entitiesMapped}
                                         next={categoryRef}
-                                        {...field} />
+                                        {...field}
+                                        onChange={(e) => {
+                                            field.onChange(e);
+                                            if (e && e.target.value) {
+                                                const entity = entities.find((entity) => entity.id === Number(e.target.value));
+                                                console.log(entity?.defaultCategoryId);
+                                                if (entity?.defaultCategoryId !== null) {
+                                                    form.setValue('categoryId', entity?.defaultCategoryId);
+                                                }
+                                            }
+                                        }}/>
                                 </FormControl>
                                 <FormMessage/>
                             </FormItem>
