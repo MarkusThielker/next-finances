@@ -1,42 +1,36 @@
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import React from 'react';
-import { getUser } from '@/auth';
-import { redirect } from 'next/navigation';
-import signOut from '@/lib/actions/signOut';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
-import { URL_SIGN_IN } from '@/lib/constants';
 import generateSampleData from '@/lib/actions/generateSampleData';
 import prisma from '@/prisma';
 import { ServerActionTrigger } from '@/components/form/serverActionTrigger';
 import accountDelete from '@/lib/actions/accountDelete';
+import { Button } from '@/components/ui/button';
+import { getSession, Session } from '@auth0/nextjs-auth0';
 
 export default async function AccountPage() {
 
-    const user = await getUser();
-
-    if (!user) {
-        redirect(URL_SIGN_IN);
-    }
+    const {user} = await getSession() as Session;
 
     let paymentCount = 0;
     paymentCount = await prisma.payment.count({
         where: {
-            userId: user.id,
+            userId: user.sub,
         },
     });
 
     let entityCount = 0;
     entityCount = await prisma.entity.count({
         where: {
-            userId: user.id,
+            userId: user.sub,
         },
     });
 
     let categoryCount = 0;
     categoryCount = await prisma.category.count({
         where: {
-            userId: user.id,
+            userId: user.sub,
         },
     });
 
@@ -44,7 +38,7 @@ export default async function AccountPage() {
         <div className="flex flex-col items-center">
             <Card className="w-full max-w-md md:mt-12">
                 <CardHeader>
-                    <CardTitle>Hey, {user?.username}!</CardTitle>
+                    <CardTitle>Hey, {user.name}!</CardTitle>
                     <CardDescription>This is your account overview.</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-2">
@@ -52,13 +46,13 @@ export default async function AccountPage() {
                         <Label>ID</Label>
                         <Input
                             disabled
-                            value={user?.id}/>
+                            value={user.sub}/>
                     </div>
                     <div>
                         <Label>Username</Label>
                         <Input
                             disabled
-                            value={user?.username}/>
+                            value={user.name}/>
                     </div>
                     <div className="flex flex-row items-center space-x-4">
                         <div>
@@ -92,10 +86,11 @@ export default async function AccountPage() {
                         variant="outline">
                         Delete Account
                     </ServerActionTrigger>
-                    <ServerActionTrigger
-                        action={signOut}>
-                        Sign Out
-                    </ServerActionTrigger>
+                    <a href="/api/auth/logout">
+                        <Button className="w-full">
+                            Sign Out
+                        </Button>
+                    </a>
                     {
                         process.env.NODE_ENV === 'development' && (
                             <ServerActionTrigger

@@ -5,6 +5,7 @@ import { cn } from '@/lib/utils';
 import { Toaster } from '@/components/ui/sonner';
 import React from 'react';
 import Navigation from '@/components/navigation';
+import { UserProvider } from '@auth0/nextjs-auth0/client';
 
 const inter = Inter({subsets: ['latin']});
 
@@ -49,6 +50,7 @@ export default function RootLayout({
                 href="/logo_white.png"
             />
         </head>
+        <UserProvider>
         <body className={cn('dark', inter.className)}>
         <Navigation/>
         <main className="p-4 sm:p-8">
@@ -56,6 +58,7 @@ export default function RootLayout({
         </main>
         <Toaster/>
         </body>
+        </UserProvider>
         </html>
     );
 }
