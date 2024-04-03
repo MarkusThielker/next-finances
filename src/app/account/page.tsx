@@ -8,6 +8,7 @@ import { ServerActionTrigger } from '@/components/form/serverActionTrigger';
 import accountDelete from '@/lib/actions/accountDelete';
 import { Button } from '@/components/ui/button';
 import { getSession, Session } from '@auth0/nextjs-auth0';
+import { URL_SIGN_OUT } from '@/lib/constants';
 
 export default async function AccountPage() {
 
@@ -86,7 +87,7 @@ export default async function AccountPage() {
                         variant="outline">
                         Delete Account
                     </ServerActionTrigger>
-                    <a href="/api/auth/logout">
+                    <a href={URL_SIGN_OUT}>
                         <Button className="w-full">
                             Sign Out
                         </Button>
