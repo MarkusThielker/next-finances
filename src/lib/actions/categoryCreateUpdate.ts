@@ -1,9 +1,9 @@
 import { z } from 'zod';
 import { ActionResponse } from '@/lib/types/actionResponse';
 import prisma from '@/prisma';
-import { getUser } from '@/auth';
 import { URL_SIGN_IN } from '@/lib/constants';
 import { categoryFormSchema } from '@/lib/form-schemas/categoryFormSchema';
+import { getSession } from '@auth0/nextjs-auth0';
 
 export default async function categoryCreateUpdate({
     id,
@@ -12,15 +12,15 @@ export default async function categoryCreateUpdate({
 }: z.infer<typeof categoryFormSchema>): Promise<ActionResponse> {
     'use server';
 
-    // check that user is logged in
-    const user = await getUser();
-    if (!user) {
+    const session = await getSession();
+    if (!session) {
         return {
             type: 'error',
-            message: 'You must be logged in to create/update an category.',
+            message: 'You aren\'t signed in.',
             redirect: URL_SIGN_IN,
         };
     }
+    const user = session.user;
 
     // create/update category
     try {
@@ -44,7 +44,7 @@ export default async function categoryCreateUpdate({
         } else {
             await prisma.category.create({
                 data: {
-                    userId: user.id,
+                    userId: user.sub,
                     name: name,
                     color: color,
                 },

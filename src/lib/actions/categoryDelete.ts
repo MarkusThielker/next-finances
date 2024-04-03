@@ -1,7 +1,7 @@
 import { ActionResponse } from '@/lib/types/actionResponse';
 import prisma from '@/prisma';
-import { getUser } from '@/auth';
 import { URL_SIGN_IN } from '@/lib/constants';
+import { getSession } from '@auth0/nextjs-auth0';
 
 export default async function categoryDelete(id: number): Promise<ActionResponse> {
     'use server';
@@ -14,21 +14,21 @@ export default async function categoryDelete(id: number): Promise<ActionResponse
         };
     }
 
-    // check that user is logged in
-    const user = await getUser();
-    if (!user) {
+    const session = await getSession();
+    if (!session) {
         return {
             type: 'error',
-            message: 'You must be logged in to delete an category.',
+            message: 'You aren\'t signed in.',
             redirect: URL_SIGN_IN,
         };
     }
+    const user = session.user;
 
     // check that category is associated with user
     const category = await prisma.category.findFirst({
         where: {
             id: id,
-            userId: user.id,
+            userId: user.sub,
         },
     });
     if (!category) {
@@ -43,7 +43,7 @@ export default async function categoryDelete(id: number): Promise<ActionResponse
         await prisma.category.delete({
                 where: {
                     id: category.id,
-                    userId: user.id,
+                    userId: user.sub,
                 },
             },
         );

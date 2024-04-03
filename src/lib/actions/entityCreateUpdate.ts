@@ -2,8 +2,8 @@ import { z } from 'zod';
 import { ActionResponse } from '@/lib/types/actionResponse';
 import { entityFormSchema } from '@/lib/form-schemas/entityFormSchema';
 import prisma from '@/prisma';
-import { getUser } from '@/auth';
 import { URL_SIGN_IN } from '@/lib/constants';
+import { getSession } from '@auth0/nextjs-auth0';
 
 export default async function entityCreateUpdate({
     id,
@@ -13,15 +13,15 @@ export default async function entityCreateUpdate({
 }: z.infer<typeof entityFormSchema>): Promise<ActionResponse> {
     'use server';
 
-    // check that user is logged in
-    const user = await getUser();
-    if (!user) {
+    const session = await getSession();
+    if (!session) {
         return {
             type: 'error',
-            message: 'You must be logged in to create/update an entity.',
+            message: 'You aren\'t signed in.',
             redirect: URL_SIGN_IN,
         };
     }
+    const user = session.user;
 
     // create/update entity
     try {
@@ -46,7 +46,7 @@ export default async function entityCreateUpdate({
         } else {
             await prisma.entity.create({
                 data: {
-                    userId: user.id,
+                    userId: user.sub,
                     name: name,
                     type: type,
                     defaultCategoryId: defaultCategoryId ?? null,
