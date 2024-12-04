@@ -136,6 +136,9 @@ export default async function generateSampleData(): Promise<ActionResponse> {
             date.setDate(1);
             date.setMonth(date.getMonth() - i);
 
+            const categoryId =
+                categories.find((it) => it.name === 'Salary')?.id!;
+
             await prisma.payment.create({
                 data: {
                     userId: user.sub,
@@ -143,7 +146,7 @@ export default async function generateSampleData(): Promise<ActionResponse> {
                     date: date,
                     payorId: entities[1].id,
                     payeeId: entities[0].id,
-                    categoryId: 5,
+                    categoryId: categoryId,
                     createdAt: date,
                     updatedAt: date,
                 },
