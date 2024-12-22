@@ -1,17 +1,17 @@
-import { getUser } from '@/auth';
 import prisma from '@/prisma';
 import React from 'react';
 import PaymentPageClientContent from '@/components/paymentPageClientComponents';
 import paymentCreateUpdate from '@/lib/actions/paymentCreateUpdate';
 import paymentDelete from '@/lib/actions/paymentDelete';
+import { getSession, Session } from '@auth0/nextjs-auth0';
 
 export default async function PaymentsPage() {
 
-    const user = await getUser();
+    const {user} = await getSession() as Session;
 
     const payments = await prisma.payment.findMany({
         where: {
-            userId: user?.id,
+            userId: user.sub,
         },
         orderBy: [
             {
@@ -25,7 +25,7 @@ export default async function PaymentsPage() {
 
     const entities = await prisma.entity.findMany({
         where: {
-            userId: user?.id,
+            userId: user.sub,
         },
         orderBy: [
             {
@@ -39,7 +39,7 @@ export default async function PaymentsPage() {
 
     const categories = await prisma.category.findMany({
         where: {
-            userId: user?.id,
+            userId: user.sub,
         },
         orderBy: [
             {

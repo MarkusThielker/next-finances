@@ -1,32 +1,32 @@
 import prisma from '@/prisma';
 import type { Category, Entity } from '@prisma/client';
 import { EntityType } from '@prisma/client';
-import { getUser } from '@/auth';
 import { URL_SIGN_IN } from '@/lib/constants';
 import { ActionResponse } from '@/lib/types/actionResponse';
+import { getSession } from '@auth0/nextjs-auth0';
 
 export default async function generateSampleData(): Promise<ActionResponse> {
     'use server';
 
-    const user = await getUser();
-
-    if (!user) {
+    const session = await getSession();
+    if (!session) {
         return {
             type: 'error',
-            message: 'You must be logged in to create/update an category.',
+            message: 'You aren\'t signed in.',
             redirect: URL_SIGN_IN,
         };
     }
+    const user = session.user;
 
     // Categories: create sample data
-    const categories: Category[] = await prisma.category.findMany({where: {userId: user.id}});
-    if (await prisma.category.count({where: {userId: user.id}}) == 0) {
+    const categories: Category[] = await prisma.category.findMany({where: {userId: user.sub}});
+    if (await prisma.category.count({where: {userId: user.sub}}) == 0) {
 
         console.log('Creating sample categories...');
 
         categories.push(await prisma.category.create({
             data: {
-                userId: user.id,
+                userId: user.sub,
                 name: 'Groceries',
                 color: '#FFBEAC',
             },
@@ -34,7 +34,7 @@ export default async function generateSampleData(): Promise<ActionResponse> {
 
         categories.push(await prisma.category.create({
             data: {
-                userId: user.id,
+                userId: user.sub,
                 name: 'Drugstore items',
                 color: '#9CBCFF',
             },
@@ -42,7 +42,7 @@ export default async function generateSampleData(): Promise<ActionResponse> {
 
         categories.push(await prisma.category.create({
             data: {
-                userId: user.id,
+                userId: user.sub,
                 name: 'Going out',
                 color: '#F1ADFF',
             },
@@ -50,7 +50,7 @@ export default async function generateSampleData(): Promise<ActionResponse> {
 
         categories.push(await prisma.category.create({
             data: {
-                userId: user.id,
+                userId: user.sub,
                 name: 'Random stuff',
                 color: '#C1FFA9',
             },
@@ -58,7 +58,7 @@ export default async function generateSampleData(): Promise<ActionResponse> {
 
         categories.push(await prisma.category.create({
             data: {
-                userId: user.id,
+                userId: user.sub,
                 name: 'Salary',
                 color: '#FFF787',
             },
@@ -69,14 +69,14 @@ export default async function generateSampleData(): Promise<ActionResponse> {
     console.log(categories);
 
     // Entities: create sample data
-    const entities: Entity[] = await prisma.entity.findMany({where: {userId: user.id}});
-    if (await prisma.entity.count({where: {userId: user.id}}) == 0) {
+    const entities: Entity[] = await prisma.entity.findMany({where: {userId: user.sub}});
+    if (await prisma.entity.count({where: {userId: user.sub}}) == 0) {
 
         console.log('Creating sample entities...');
 
         entities.push(await prisma.entity.create({
             data: {
-                userId: user.id,
+                userId: user.sub,
                 name: 'Main Account',
                 type: EntityType.Account,
             },
@@ -84,7 +84,7 @@ export default async function generateSampleData(): Promise<ActionResponse> {
 
         entities.push(await prisma.entity.create({
             data: {
-                userId: user.id,
+                userId: user.sub,
                 name: 'Company',
                 type: EntityType.Entity,
             },
@@ -92,7 +92,7 @@ export default async function generateSampleData(): Promise<ActionResponse> {
 
         entities.push(await prisma.entity.create({
             data: {
-                userId: user.id,
+                userId: user.sub,
                 name: 'Supermarket 1',
                 type: EntityType.Entity,
             },
@@ -100,7 +100,7 @@ export default async function generateSampleData(): Promise<ActionResponse> {
 
         entities.push(await prisma.entity.create({
             data: {
-                userId: user.id,
+                userId: user.sub,
                 name: 'Supermarket 2',
                 type: EntityType.Entity,
             },
@@ -108,7 +108,7 @@ export default async function generateSampleData(): Promise<ActionResponse> {
 
         entities.push(await prisma.entity.create({
             data: {
-                userId: user.id,
+                userId: user.sub,
                 name: 'Supermarket 3',
                 type: EntityType.Entity,
             },
@@ -116,7 +116,7 @@ export default async function generateSampleData(): Promise<ActionResponse> {
 
         entities.push(await prisma.entity.create({
             data: {
-                userId: user.id,
+                userId: user.sub,
                 name: 'Supermarket 4',
                 type: EntityType.Entity,
             },
@@ -129,21 +129,24 @@ export default async function generateSampleData(): Promise<ActionResponse> {
     // Payments: create sample data
     console.log('Creating sample payments...');
 
-    if (await prisma.payment.count({where: {userId: user.id}}) == 0) {
+    if (await prisma.payment.count({where: {userId: user.sub}}) == 0) {
         for (let i = 0; i < 4; i++) {
 
             const date = new Date();
             date.setDate(1);
             date.setMonth(date.getMonth() - i);
 
+            const categoryId =
+                categories.find((it) => it.name === 'Salary')?.id!;
+
             await prisma.payment.create({
                 data: {
-                    userId: user.id,
+                    userId: user.sub,
                     amount: 200000,
                     date: date,
                     payorId: entities[1].id,
                     payeeId: entities[0].id,
-                    categoryId: 5,
+                    categoryId: categoryId,
                     createdAt: date,
                     updatedAt: date,
                 },
@@ -166,7 +169,7 @@ export default async function generateSampleData(): Promise<ActionResponse> {
 
         await prisma.payment.create({
             data: {
-                userId: user.id,
+                userId: user.sub,
                 amount: Math.floor(
                     Math.random() * (maxAmount - minAmount) + minAmount),
                 date: date,

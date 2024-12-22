@@ -1,13 +1,13 @@
 import prisma from '@/prisma';
-import { getUser } from '@/auth';
 import React from 'react';
 import EntityPageClientContent from '@/components/entityPageClientComponents';
 import entityCreateUpdate from '@/lib/actions/entityCreateUpdate';
 import entityDelete from '@/lib/actions/entityDelete';
+import { getSession, Session } from '@auth0/nextjs-auth0';
 
 export default async function EntitiesPage() {
 
-    const user = await getUser();
+    const {user} = await getSession() as Session;
 
     const entities = await prisma.entity.findMany({
         where: {
