@@ -1,6 +1,6 @@
 'use client';
 
-import { buttonVariants } from '@/components/ui/button';
+import { Button, buttonVariants } from '@/components/ui/button';
 import React from 'react';
 import { Slot } from '@radix-ui/react-slot';
 import { cn } from '@/lib/utils';
@@ -25,6 +25,7 @@ export interface ConfirmationDialogProps {
     title: string;
     description?: string;
     actionText?: string;
+    actionVariant?: 'default' | 'destructive' | 'outline' | 'secondary' | 'ghost' | 'link';
 }
 
 export interface ButtonWithActionProps<T = any>
@@ -76,9 +77,11 @@ const ServerActionTrigger = React.forwardRef<HTMLButtonElement, ButtonWithAction
                         <AlertDialogCancel>
                             Cancel
                         </AlertDialogCancel>
-                        <AlertDialogAction onClick={handleSubmit}>
-                            {props.dialog.actionText || 'Confirm'}
-                        </AlertDialogAction>
+                        <Button variant={props.dialog.actionVariant || 'default'} asChild>
+                            <AlertDialogAction onClick={handleSubmit}>
+                                {props.dialog.actionText || 'Confirm'}
+                            </AlertDialogAction>
+                        </Button>
                     </AlertDialogFooter>
                 </AlertDialogContent>
             </AlertDialog>
