@@ -1,4 +1,4 @@
-FROM node:21-alpine AS base
+FROM oven/bun AS base
 
 # Install dependencies only when needed
 FROM base AS deps
@@ -6,8 +6,8 @@ FROM base AS deps
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
-COPY package.json package-lock.json* ./
-RUN npm ci
+COPY package.json bun.lockb* ./
+RUN bun install
 
 
 # Rebuild the source code only when needed
@@ -18,15 +18,15 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
 # dependencies have to be changed depending on target architecture
-RUN npm i @node-rs/argon2-linux-x64-musl # arm64 = @node-rs/argon2-linux-arm64-musl
-RUN npm i @node-rs/bcrypt-linux-x64-musl # arm64 = @node-rs/bcrypt-linux-arm64-musl
+RUN bun install @node-rs/argon2-linux-x64-musl # arm64 = @node-rs/argon2-linux-arm64-musl
+RUN bun install @node-rs/bcrypt-linux-x64-musl # arm64 = @node-rs/bcrypt-linux-arm64-musl
 
 COPY prisma/ ./prisma/
 
-RUN npx prisma generate
+RUN bunx prisma generate
 
 ENV NEXT_TELEMETRY_DISABLED 1
-RUN npm run build
+RUN bun run build
 
 
 # Production image, copy all the files and run next

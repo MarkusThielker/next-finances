@@ -42,13 +42,13 @@ cp .env.example .env
 docker compose -f docker/finances-dev/docker-compose.yml up -d
 
 ## generate prisma client
-npx prisma generate
+bunx prisma generate
 
 ## apply database migrations
-npx prisma migrate deploy
+bunx prisma migrate deploy
 
 ## start the development server
-npm run dev
+bun run dev
 
 ```
 
