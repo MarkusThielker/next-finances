@@ -38,15 +38,25 @@ export default async function categoryDelete(id: number): Promise<ActionResponse
         };
     }
 
-    // delete category
     try {
-        await prisma.category.delete({
+
+        await prisma.$transaction(async (tx) => {
+
+            // update related payments
+            await tx.payment.updateMany({
+                where: {categoryId: category.id},
+                data: {categoryId: null},
+            });
+
+            // delete the category
+            await tx.category.delete({
                 where: {
                     id: category.id,
                     userId: user.sub,
                 },
-            },
-        );
+            });
+        });
+
     } catch (e) {
         return {
             type: 'error',
