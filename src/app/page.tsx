@@ -15,11 +15,11 @@ export type EntityNumber = {
     value: number,
 }
 
-export default async function DashboardPage(props: { searchParams?: { scope: ScopeType } }) {
+export default async function DashboardPage(props: { searchParams?: Promise<{ scope: ScopeType }> }) {
 
     const {user} = await getSession() as Session;
 
-    const scope = Scope.of(props.searchParams?.scope || ScopeType.ThisMonth);
+    const scope = Scope.of((await props.searchParams)?.scope || ScopeType.ThisMonth);
 
     // get all payments in the current scope
     const payments = await prisma.payment.findMany({
