@@ -69,6 +69,7 @@ export default function PaymentForm({value, entities, categories, onSubmit, clas
 
     const payeeRef = useRef<HTMLInputElement>({} as HTMLInputElement);
     const categoryRef = useRef<HTMLInputElement>({} as HTMLInputElement);
+    const submitRef = useRef<HTMLButtonElement>({} as HTMLButtonElement);
 
     return (
         <Form {...form}>
@@ -149,7 +150,9 @@ export default function PaymentForm({value, entities, categories, onSubmit, clas
                                         {...field}
                                         onChange={(e) => {
                                             field.onChange(e);
-                                            payeeRef && payeeRef.current.focus();
+                                            if (e && e.target.value) {
+                                                payeeRef && payeeRef.current.focus();
+                                            }
                                         }}/>
                                 </FormControl>
                                 <FormMessage/>
