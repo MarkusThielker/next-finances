@@ -179,7 +179,7 @@ export default function PaymentForm({value, entities, categories, onSubmit, clas
                                                 // only focus category input if payee has no default category
                                                 if (entity?.defaultCategoryId !== null) {
                                                     form.setValue('categoryId', entity?.defaultCategoryId);
-                                                    setTimeout(() => categoryRef.current.blur(), 0);
+                                                    submitRef && submitRef.current.focus();
                                                 } else {
                                                     categoryRef && categoryRef.current.focus();
                                                 }
@@ -201,7 +201,14 @@ export default function PaymentForm({value, entities, categories, onSubmit, clas
                                     <AutoCompleteInput
                                         placeholder="Select category"
                                         items={categoriesMapped}
-                                        {...field} />
+                                        {...field}
+                                        onChange={(e) => {
+                                            field.onChange(e);
+                                            if (e && e.target.value) {
+                                                submitRef && submitRef.current.focus();
+                                            }
+                                        }}
+                                    />
                                 </FormControl>
                                 <FormMessage/>
                             </FormItem>
@@ -223,7 +230,8 @@ export default function PaymentForm({value, entities, categories, onSubmit, clas
                     )}
                 />
 
-                <Button type="submit" className="w-full">{value?.id ? 'Update Payment' : 'Create Payment'}</Button>
+                <Button type="submit" ref={submitRef}
+                        className="w-full">{value?.id ? 'Update Payment' : 'Create Payment'}</Button>
             </form>
         </Form>
     );
