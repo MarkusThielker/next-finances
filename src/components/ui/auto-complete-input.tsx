@@ -9,7 +9,6 @@ import { Button } from '@/components/ui/button';
 export interface AutoCompleteInputProps
     extends React.InputHTMLAttributes<HTMLInputElement> {
     items: { label: string, value: any }[];
-    next?: React.RefObject<HTMLInputElement>;
 }
 
 const AutoCompleteInput = React.forwardRef<HTMLInputElement, AutoCompleteInputProps>(
@@ -32,7 +31,6 @@ const AutoCompleteInput = React.forwardRef<HTMLInputElement, AutoCompleteInputPr
 
         function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
 
-            props.onChange?.(undefined as any);
             const value = e.target.value;
 
             setFilteredItems(props?.items?.filter((item) => {
@@ -41,19 +39,26 @@ const AutoCompleteInput = React.forwardRef<HTMLInputElement, AutoCompleteInputPr
 
             setValue(value);
             setOpen(value.length > 0);
+
+            // on typing only the internal state is changed while the form state is
+            // set to undefined. This way only the predefined items are actual values
+            // for the form validation
+            props.onChange?.(undefined as any);
         }
 
+        // since typing changes the internal values and therefor the selected value, this effect
+        // handles every filteredItems change to check if only one item is left
         useEffect(() => {
+            // only one item is left and the last character was a letter or digit.
+            // the last condition has to be checked to make it possible to use the backspace
             if (filteredItems.length === 1 && /^[a-zA-Z0-9]$/.test(lastKey)) {
                 setValue(filteredItems[0].label);
                 setOpen(false);
                 props.onChange?.({target: {value: filteredItems[0].value}} as any);
-                props.next && props.next.current?.focus();
             }
         }, [filteredItems]);
 
         useEffect(() => {
-            console.log('Prop value changed', value, props.value);
             if (props.value) {
                 setValue(getNameOfPropValue());
             } else {
@@ -105,7 +110,6 @@ const AutoCompleteInput = React.forwardRef<HTMLInputElement, AutoCompleteInputPr
                                     className="px-3 py-3 hover:bg-accent hover:text-accent-foreground cursor-pointer text-sm font-medium"
                                     onClick={() => {
                                         props.onChange?.({target: {value: item.value}} as any);
-                                        props.next && props.next.current?.focus();
                                         setValue(item.label);
                                         setOpen(false);
                                     }}
