@@ -10,4 +10,4 @@ docker run -d \
   --restart unless-stopped \
   -v $HOME/.docker/config.json:/config.json \
   -v /var/run/docker.sock:/var/run/docker.sock \
-  containrrr/watchtower -s "*/30 * * * * *" --label-enable
+  containrrr/watchtower -s "*/30 * * * * *" --label-enable --include-stopped
