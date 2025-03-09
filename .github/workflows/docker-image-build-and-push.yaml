@@ -1,7 +1,6 @@
-name: Docker Image Build and Push
+name: Production Deployment
 
 on:
-  workflow_dispatch:
   push:
     tags: [ "v*.*.*" ]
 
