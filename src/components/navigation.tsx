@@ -78,7 +78,7 @@ export default function Navigation() {
                     <NavigationMenuList className="flex w-screen items-center justify-between sm:px-4 py-2">
                         <div className="inline-flex space-x-2">
 
-                            <img src={'/logo_white.png'} alt="Finances" className="h-10 w-10 mx-3"/>
+                            <img src={'/logo_t_hq_w.svg'} alt="Finances" className="h-10 w-10 mx-3"/>
 
                             <NavigationMenuItem>
                                 <Link href="/" legacyBehavior passHref>
