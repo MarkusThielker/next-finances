@@ -3,7 +3,7 @@ import { ActionResponse } from '@/lib/types/actionResponse';
 import { entityFormSchema } from '@/lib/form-schemas/entityFormSchema';
 import prisma from '@/prisma';
 import { URL_SIGN_IN } from '@/lib/constants';
-import { getSession } from '@auth0/nextjs-auth0';
+import { auth0 } from '@/lib/auth';
 
 export default async function entityCreateUpdate({
     id,
@@ -13,7 +13,7 @@ export default async function entityCreateUpdate({
 }: z.infer<typeof entityFormSchema>): Promise<ActionResponse> {
     'use server';
 
-    const session = await getSession();
+    const session = await auth0.getSession();
     if (!session) {
         return {
             type: 'error',

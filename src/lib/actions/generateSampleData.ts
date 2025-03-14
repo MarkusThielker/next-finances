@@ -3,12 +3,12 @@ import type { Category, Entity } from '@prisma/client';
 import { EntityType } from '@prisma/client';
 import { URL_SIGN_IN } from '@/lib/constants';
 import { ActionResponse } from '@/lib/types/actionResponse';
-import { getSession } from '@auth0/nextjs-auth0';
+import { auth0 } from '@/lib/auth';
 
 export default async function generateSampleData(): Promise<ActionResponse> {
     'use server';
 
-    const session = await getSession();
+    const session = await auth0.getSession();
     if (!session) {
         return {
             type: 'error',

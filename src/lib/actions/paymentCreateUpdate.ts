@@ -3,7 +3,7 @@ import { ActionResponse } from '@/lib/types/actionResponse';
 import prisma from '@/prisma';
 import { URL_SIGN_IN } from '@/lib/constants';
 import { paymentFormSchema } from '@/lib/form-schemas/paymentFormSchema';
-import { getSession } from '@auth0/nextjs-auth0';
+import { auth0 } from '@/lib/auth';
 
 export default async function paymentCreateUpdate({
     id,
@@ -16,7 +16,7 @@ export default async function paymentCreateUpdate({
 }: z.infer<typeof paymentFormSchema>): Promise<ActionResponse> {
     'use server';
 
-    const session = await getSession();
+    const session = await auth0.getSession();
     if (!session) {
         return {
             type: 'error',
