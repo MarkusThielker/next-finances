@@ -7,12 +7,17 @@ import prisma from '@/prisma';
 import { ServerActionTrigger } from '@/components/form/serverActionTrigger';
 import clearAccountData from '@/lib/actions/clearAccountData';
 import { Button } from '@/components/ui/button';
-import { getSession, Session } from '@auth0/nextjs-auth0';
 import { URL_SIGN_OUT } from '@/lib/constants';
+import { auth0 } from '@/lib/auth';
+import { redirect } from 'next/navigation';
 
 export default async function AccountPage() {
 
-    const {user} = await getSession() as Session;
+    const session = await auth0.getSession();
+    if (!session) {
+        return redirect('/auth/login');
+    }
+    const user = session.user;
 
     let paymentCount = 0;
     paymentCount = await prisma.payment.count({
