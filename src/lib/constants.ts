@@ -1,5 +1,5 @@
-export const URL_SIGN_IN = `/api/auth/login`;
-export const URL_SIGN_OUT = `/api/auth/logout`;
+export const URL_SIGN_IN = `/auth/login`;
+export const URL_SIGN_OUT = `/auth/logout`;
 
 
 // main urls
