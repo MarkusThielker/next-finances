@@ -3,7 +3,8 @@ import { Category, Entity, EntityType } from '@prisma/client';
 import { Scope, ScopeType } from '@/lib/types/scope';
 import prisma from '@/prisma';
 import DashboardPageClient from '@/components/dashboardPageClientComponents';
-import { getSession, Session } from '@auth0/nextjs-auth0';
+import { auth0 } from '@/lib/auth';
+import { redirect } from 'next/navigation';
 
 export type CategoryNumber = {
     category: Category,
@@ -17,7 +18,11 @@ export type EntityNumber = {
 
 export default async function DashboardPage(props: { searchParams?: Promise<{ scope: ScopeType }> }) {
 
-    const {user} = await getSession() as Session;
+    const session = await auth0.getSession();
+    if (!session) {
+        return redirect('/auth/login');
+    }
+    const user = session.user;
 
     const scope = Scope.of((await props.searchParams)?.scope || ScopeType.ThisMonth);
 

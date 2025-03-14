@@ -3,11 +3,16 @@ import React from 'react';
 import PaymentPageClientContent from '@/components/paymentPageClientComponents';
 import paymentCreateUpdate from '@/lib/actions/paymentCreateUpdate';
 import paymentDelete from '@/lib/actions/paymentDelete';
-import { getSession, Session } from '@auth0/nextjs-auth0';
+import { auth0 } from '@/lib/auth';
+import { redirect } from 'next/navigation';
 
 export default async function PaymentsPage() {
 
-    const {user} = await getSession() as Session;
+    const session = await auth0.getSession();
+    if (!session) {
+        return redirect('/auth/login');
+    }
+    const user = session.user;
 
     const payments = await prisma.payment.findMany({
         where: {
