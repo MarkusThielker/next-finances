@@ -1,13 +1,18 @@
 import prisma from '@/prisma';
-import { getUser } from '@/auth';
 import React from 'react';
 import EntityPageClientContent from '@/components/entityPageClientComponents';
 import entityCreateUpdate from '@/lib/actions/entityCreateUpdate';
 import entityDelete from '@/lib/actions/entityDelete';
+import { auth0 } from '@/lib/auth';
+import { redirect } from 'next/navigation';
 
 export default async function EntitiesPage() {
 
-    const user = await getUser();
+    const session = await auth0.getSession();
+    if (!session) {
+        return redirect('/auth/login');
+    }
+    const user = session.user;
 
     const entities = await prisma.entity.findMany({
         where: {

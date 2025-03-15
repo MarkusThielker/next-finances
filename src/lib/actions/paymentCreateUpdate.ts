@@ -1,9 +1,9 @@
 import { z } from 'zod';
 import { ActionResponse } from '@/lib/types/actionResponse';
 import prisma from '@/prisma';
-import { getUser } from '@/auth';
 import { URL_SIGN_IN } from '@/lib/constants';
 import { paymentFormSchema } from '@/lib/form-schemas/paymentFormSchema';
+import { auth0 } from '@/lib/auth';
 
 export default async function paymentCreateUpdate({
     id,
@@ -16,15 +16,15 @@ export default async function paymentCreateUpdate({
 }: z.infer<typeof paymentFormSchema>): Promise<ActionResponse> {
     'use server';
 
-    // check that user is logged in
-    const user = await getUser();
-    if (!user) {
+    const session = await auth0.getSession();
+    if (!session) {
         return {
             type: 'error',
-            message: 'You must be logged in to create/update a payment.',
+            message: 'You aren\'t signed in.',
             redirect: URL_SIGN_IN,
         };
     }
+    const user = session.user;
 
     // create/update payment
     try {
@@ -52,7 +52,7 @@ export default async function paymentCreateUpdate({
         } else {
             await prisma.payment.create({
                 data: {
-                    userId: user.id,
+                    userId: user.sub,
                     amount: amount,
                     date: date,
                     payorId: payorId,

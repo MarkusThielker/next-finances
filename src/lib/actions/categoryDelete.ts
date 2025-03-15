@@ -1,7 +1,7 @@
 import { ActionResponse } from '@/lib/types/actionResponse';
 import prisma from '@/prisma';
-import { getUser } from '@/auth';
 import { URL_SIGN_IN } from '@/lib/constants';
+import { auth0 } from '@/lib/auth';
 
 export default async function categoryDelete(id: number): Promise<ActionResponse> {
     'use server';
@@ -14,21 +14,21 @@ export default async function categoryDelete(id: number): Promise<ActionResponse
         };
     }
 
-    // check that user is logged in
-    const user = await getUser();
-    if (!user) {
+    const session = await auth0.getSession();
+    if (!session) {
         return {
             type: 'error',
-            message: 'You must be logged in to delete an category.',
+            message: 'You aren\'t signed in.',
             redirect: URL_SIGN_IN,
         };
     }
+    const user = session.user;
 
     // check that category is associated with user
     const category = await prisma.category.findFirst({
         where: {
             id: id,
-            userId: user.id,
+            userId: user.sub,
         },
     });
     if (!category) {
@@ -38,15 +38,25 @@ export default async function categoryDelete(id: number): Promise<ActionResponse
         };
     }
 
-    // delete category
     try {
-        await prisma.category.delete({
+
+        await prisma.$transaction(async (tx) => {
+
+            // update related payments
+            await tx.payment.updateMany({
+                where: {categoryId: category.id},
+                data: {categoryId: null},
+            });
+
+            // delete the category
+            await tx.category.delete({
                 where: {
                     id: category.id,
-                    userId: user.id,
+                    userId: user.sub,
                 },
-            },
-        );
+            });
+        });
+
     } catch (e) {
         return {
             type: 'error',

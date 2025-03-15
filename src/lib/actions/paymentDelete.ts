@@ -1,7 +1,7 @@
 import { ActionResponse } from '@/lib/types/actionResponse';
 import prisma from '@/prisma';
-import { getUser } from '@/auth';
 import { URL_SIGN_IN } from '@/lib/constants';
+import { auth0 } from '@/lib/auth';
 
 export default async function paymentDelete(id: number): Promise<ActionResponse> {
     'use server';
@@ -14,21 +14,21 @@ export default async function paymentDelete(id: number): Promise<ActionResponse>
         };
     }
 
-    // check that user is logged in
-    const user = await getUser();
-    if (!user) {
+    const session = await auth0.getSession();
+    if (!session) {
         return {
             type: 'error',
-            message: 'You must be logged in to delete a payment.',
+            message: 'You aren\'t signed in.',
             redirect: URL_SIGN_IN,
         };
     }
+    const user = session.user;
 
     // check that payment is associated with user
     const payment = await prisma.payment.findFirst({
         where: {
             id: id,
-            userId: user.id,
+            userId: user.sub,
         },
     });
     if (!payment) {
@@ -43,7 +43,7 @@ export default async function paymentDelete(id: number): Promise<ActionResponse>
         await prisma.payment.delete({
                 where: {
                     id: payment.id,
-                    userId: user.id,
+                    userId: user.sub,
                 },
             },
         );

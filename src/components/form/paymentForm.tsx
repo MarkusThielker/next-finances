@@ -67,9 +67,9 @@ export default function PaymentForm({value, entities, categories, onSubmit, clas
         };
     }) ?? [];
 
-    const payeeRef = useRef<HTMLInputElement>(null);
-    const categoryRef = useRef<HTMLInputElement>(null);
-    const noteRef = useRef<HTMLInputElement>(null);
+    const payeeRef = useRef<HTMLInputElement>({} as HTMLInputElement);
+    const categoryRef = useRef<HTMLInputElement>({} as HTMLInputElement);
+    const submitRef = useRef<HTMLButtonElement>({} as HTMLButtonElement);
 
     return (
         <Form {...form}>
@@ -147,8 +147,13 @@ export default function PaymentForm({value, entities, categories, onSubmit, clas
                                     <AutoCompleteInput
                                         placeholder="Select payor"
                                         items={entitiesMapped}
-                                        next={payeeRef}
-                                        {...field} />
+                                        {...field}
+                                        onChange={(e) => {
+                                            field.onChange(e);
+                                            if (e && e.target.value) {
+                                                payeeRef && payeeRef.current.focus();
+                                            }
+                                        }}/>
                                 </FormControl>
                                 <FormMessage/>
                             </FormItem>
@@ -165,15 +170,18 @@ export default function PaymentForm({value, entities, categories, onSubmit, clas
                                     <AutoCompleteInput
                                         placeholder="Select payee"
                                         items={entitiesMapped}
-                                        next={categoryRef}
                                         {...field}
                                         onChange={(e) => {
                                             field.onChange(e);
                                             if (e && e.target.value) {
                                                 const entity = entities.find((entity) => entity.id === Number(e.target.value));
-                                                console.log(entity?.defaultCategoryId);
+
+                                                // only focus category input if payee has no default category
                                                 if (entity?.defaultCategoryId !== null) {
                                                     form.setValue('categoryId', entity?.defaultCategoryId);
+                                                    submitRef && submitRef.current.focus();
+                                                } else {
+                                                    categoryRef && categoryRef.current.focus();
                                                 }
                                             }
                                         }}/>
@@ -193,8 +201,14 @@ export default function PaymentForm({value, entities, categories, onSubmit, clas
                                     <AutoCompleteInput
                                         placeholder="Select category"
                                         items={categoriesMapped}
-                                        next={noteRef}
-                                        {...field} />
+                                        {...field}
+                                        onChange={(e) => {
+                                            field.onChange(e);
+                                            if (e && e.target.value) {
+                                                submitRef && submitRef.current.focus();
+                                            }
+                                        }}
+                                    />
                                 </FormControl>
                                 <FormMessage/>
                             </FormItem>
@@ -216,7 +230,8 @@ export default function PaymentForm({value, entities, categories, onSubmit, clas
                     )}
                 />
 
-                <Button type="submit" className="w-full">{value?.id ? 'Update Payment' : 'Create Payment'}</Button>
+                <Button type="submit" ref={submitRef}
+                        className="w-full">{value?.id ? 'Update Payment' : 'Create Payment'}</Button>
             </form>
         </Form>
     );

@@ -7,36 +7,9 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  // lucia internal fields
-  id       String    @id
-  sessions Session[]
-
-  // custom fields
-  username String @unique
-  password String
-
-  entities   Entity[]
-  payments   Payment[]
-  categories Category[]
-
-  @@map("lucia_user")
-}
-
-model Session {
-  // lucia internal fields
-  id        String   @id
-  userId    String
-  expiresAt DateTime
-  user      User     @relation(references: [id], fields: [userId], onDelete: Cascade)
-
-  @@map("lucia_session")
-}
-
 model Entity {
   id                Int        @id @default(autoincrement())
   userId            String     @map("user_id")
-  user              User       @relation(fields: [userId], references: [id])
   name              String
   type              EntityType
   defaultCategory   Category?  @relation(fields: [defaultCategoryId], references: [id])
@@ -59,7 +32,6 @@ enum EntityType {
 model Payment {
   id         Int       @id @default(autoincrement())
   userId     String    @map("user_id")
-  user       User      @relation(fields: [userId], references: [id])
   amount     Int
   currency   String    @default("EUR")
   date       DateTime  @default(now())
@@ -79,7 +51,6 @@ model Payment {
 model Category {
   id        Int      @id @default(autoincrement())
   userId    String   @map("user_id")
-  user      User     @relation(fields: [userId], references: [id])
   name      String
   color     String
   createdAt DateTime @default(now()) @map("created_at")

@@ -8,7 +8,7 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
-    command: npx prisma migrate deploy
+    command: bunx prisma migrate deploy
     labels:
       - "com.centurylinklabs.watchtower.enable=true"
     networks:
@@ -42,7 +42,7 @@ services:
     depends_on:
       app-migrations:
         condition: service_completed_successfully
-    command: npx prisma studio
+    command: bunx prisma studio
     restart: unless-stopped
     labels:
       - "traefik.enable=true"

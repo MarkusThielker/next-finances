@@ -7,20 +7,20 @@ This is my simple finances tracker that I use to keep track of my spending.
 ### Understanding the Basics
 
 - **Entities**: The core building blocks of your finances.
-  - Accounts: Where you hold money (e.g., bank accounts, PayPal account, cash)
-  - Entities: Where you spend money (e.g., Walmart, Spotify, Netflix)
+    - Accounts: Where you hold money (e.g., bank accounts, PayPal account, cash)
+    - Entities: Where you spend money (e.g., Walmart, Spotify, Netflix)
 - **Payments**: Record money movement.
-  - Expenses: Money leaving an Account. (Account -> Entity)
-  - Income: Money entering an Account. (Entity -> Account)
+    - Expenses: Money leaving an Account. (Account -> Entity)
+    - Income: Money entering an Account. (Entity -> Account)
 - **Categories** *(optional)*: Add labels to Payments for better tracking.
 
 ### Your First Steps
 
 - Set up: Create Entities and Accounts that reflect your finances.
 - Record a Payment:
-  - Enter the amount and date.
-  - Select payor and payee
-  - *(optional)* Assign a category or enter a note.
+    - Enter the amount and date.
+    - Select payor and payee
+    - *(optional)* Assign a category or enter a note.
 - Explore: View your payment history and view your statics at the dashboard
 
 ### Tips
@@ -42,17 +42,22 @@ cp .env.example .env
 docker compose -f docker/finances-dev/docker-compose.yml up -d
 
 ## generate prisma client
-npx prisma generate
+bunx prisma generate
 
 ## apply database migrations
-npx prisma migrate deploy
+bunx prisma migrate deploy
 
 ## start the development server
-npm run dev
+bun run dev
 
 ```
 
-Then open [http://localhost:3000](http://localhost:3000) with your browser and create an account.
+This project relies on [Auth0](https://auth0.com) authentication. To use it you will have to create an Auth0 account,
+create an application of type 'Single Page Application' and now add the required details to your .env file.
+You will also have to add `http://localhost:3000/auth/callback` as an `Allowed Callback URL` and `http://localhost:3000`
+as an `Allowed Logout URL` and `Allowed Web Origins` in your Auth0 console.
+
+Now open [http://localhost:3000](http://localhost:3000) with your browser and create an account.
 While in development mode, you can generate sample data from the [Account page](http://localhost:3000/account).
 
 ## Deployment

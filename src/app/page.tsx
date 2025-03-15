@@ -2,8 +2,9 @@ import React from 'react';
 import { Category, Entity, EntityType } from '@prisma/client';
 import { Scope, ScopeType } from '@/lib/types/scope';
 import prisma from '@/prisma';
-import { getUser } from '@/auth';
 import DashboardPageClient from '@/components/dashboardPageClientComponents';
+import { auth0 } from '@/lib/auth';
+import { redirect } from 'next/navigation';
 
 export type CategoryNumber = {
     category: Category,
@@ -15,19 +16,20 @@ export type EntityNumber = {
     value: number,
 }
 
-export default async function DashboardPage(props: { searchParams?: { scope: ScopeType } }) {
+export default async function DashboardPage(props: { searchParams?: Promise<{ scope: ScopeType }> }) {
 
-    const user = await getUser();
-    if (!user) {
-        return;
+    const session = await auth0.getSession();
+    if (!session) {
+        return redirect('/auth/login');
     }
+    const user = session.user;
 
-    const scope = Scope.of(props.searchParams?.scope || ScopeType.ThisMonth);
+    const scope = Scope.of((await props.searchParams)?.scope || ScopeType.ThisMonth);
 
     // get all payments in the current scope
     const payments = await prisma.payment.findMany({
         where: {
-            userId: user?.id,
+            userId: user.sub,
             date: {
                 gte: scope.start,
                 lte: scope.end,
