@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+        "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns:serif="http://www.serif.com/" width="100%" height="100%" viewBox="0 0 2250 2250"
+     version="1.1" xmlns="http://www.w3.org/2000/svg" xml:space="preserve"
+     style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;"><g id="frame"><rect id="tl" x="0" y="0" width="125" height="520.833" style="fill:#fff;"/><rect
+        id="t" x="0" y="-0" width="2250" height="125" style="fill:#fff;"/><rect id="tr" x="2125" y="0" width="125"
+                                                                                height="520.833" style="fill:#fff;"/><rect
+        id="bl" x="0" y="1729.17" width="125" height="520.833" style="fill:#fff;"/><rect id="b" x="0" y="2125"
+                                                                                         width="2250" height="125"
+                                                                                         style="fill:#fff;"/><rect
+        id="br" x="2125" y="1729.17" width="125" height="520.833" style="fill:#fff;"/></g>
+    <g id="text"><g id="text1" serif:id="text" transform="matrix(1,0,0,0.947314,7.10543e-15,-3.78368)"><g transform="matrix(1636.19,0,0,1636.19,2149.91,1766.12)"></g><text
+            x="-57.321px" y="1766.12px" style="font-family:'Akshar-Regular', 'Akshar';font-size:1636.19px;fill:#fff;">t<tspan
+            x="513.711px 891.672px 1598.51px " y="1766.12px 1766.12px 1766.12px ">lkr</tspan></text></g>
+        <circle id="dot" cx="2156.78" cy="1578.59" r="88.542" style="fill:#fff;"/></g></svg>

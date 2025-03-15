@@ -46,7 +46,7 @@ export default function RootLayout({
             <link crossOrigin="use-credentials" rel="manifest" href="/manifest.json"/>
             <link
                 rel="icon"
-                href="/logo_white.png"
+                href="/logo_t_hq_o.svg"
             />
         </head>
         <body className={cn('dark', inter.className)}>
