@@ -125,10 +125,7 @@ export default function PaymentForm({value, entities, categories, onSubmit, clas
                                         <Calendar
                                             mode="single"
                                             selected={field.value}
-                                            onSelect={(e) => {
-                                                field.onChange(e);
-                                            }}
-                                            initialFocus
+                                            onSelect={field.onChange}
                                         />
                                     </PopoverContent>
                                 </Popover>
